@@ -1,0 +1,46 @@
+#!/usr/bin/env ruby
+unless Gem::Specification.find_by_name('drailties').gem_dir == File.expand_path("../..", __FILE__)
+  $:.push File.expand_path("../../lib", __FILE__)
+  $:.delete "#{Gem::Specification.find_by_name('drailties').gem_dir}/lib"
+end
+
+ARGV << '--help' if ARGV.empty?
+
+aliases = {
+    'ds' => 'domainserver',
+    's' => 'server',
+    'ps' => 'projectionserver',
+    'g' => 'generate'
+}
+
+
+help_message = <<-EOT
+
+Usage: drails COMMAND
+
+where COMMAND is one of:
+
+  new                     creates a new drails application
+  generate(g)             run a rails generator
+  domainserver(ds)        start the domain server
+  projectionserver(ps)    start the projection server
+  server(s)               start both server
+  rake                    start a rake task
+EOT
+
+command = ARGV.shift
+command = aliases[command] || command
+
+case command
+  when 'new'
+    require 'drails/application'
+  when 'generate','rake','server', 'domainserver', 'projectionserver'
+    ROOT_DIR ||= Dir.pwd
+    require "drails/#{command}"
+  when '-h', '--help'
+    puts help_message
+  else
+    puts "Error: Command '#{command}' not recognized"
+    puts help_message
+    exit(1)
+end

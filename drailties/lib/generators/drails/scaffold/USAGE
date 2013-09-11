@@ -1,0 +1,29 @@
+Description:
+    Scaffolds a complete resource with models, migration, projections, controller, views
+    commands, events and command_processor.
+
+Example:
+    rails generate drails:scaffold Thing
+
+    This will create:
+        app/commands/thing_create_command.rb
+        app/commands/thing_update_command.rb
+        app/commands/thing_delete_command.rb
+        app/controllers/things_controller
+        app/events/thing_create_event.rb
+        app/events/thing_update_event.rb
+        app/events/thing_delete_event.rb
+        app/helpers/thing_helper.rb
+        app/models/thing.rb
+        app/projections/thing_projection.rb
+        app/views/things/_form.html.erb
+        app/views/things/edit.html.erb
+        app/views/things/index.html.erb
+        app/views/things/new.html.erb
+        app/views/things/show.html.erb
+        db/migrate/create_thing.rb
+        db/migrate_domain/create_thing.rb
+        domain/command_processors/thing_processor.rb
+        domain/models/thing.rb
+        domain/projections/thing_projection.rb
+        a resource route

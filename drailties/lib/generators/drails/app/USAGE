@@ -1,0 +1,10 @@
+Description:
+    Add drails to your project.
+
+Example:
+    rails generate drails:app
+
+    This will create:
+        config/build_validations_registry.rb
+        config/initializers/create_domain.rb
+        config/disco.yml

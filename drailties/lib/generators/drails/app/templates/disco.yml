@@ -1,0 +1,54 @@
+development:
+  domain_database:
+    adapter: sqlite3
+    database: db/domain_dev.sqlite3
+    pool: 5
+    timeout: 5000
+  projection_database:
+    adapter: sqlite3
+    database: db/projection_dev.sqlite3
+    pool: 5
+    timeout: 5000
+  drb_server:
+    scheme: druby
+    host: 127.0.0.1
+    port: 8787
+  event_connection:
+    scheme: amqp
+    host: 127.0.0.1
+    port: 5672
+  event_exchange: events
+
+test:
+  domain_database:
+    adapter: sqlite3
+    database: db/domain_test.sqlite3
+    pool: 5
+    timeout: 5000
+  projection_database:
+    adapter: sqlite3
+    database: db/projection_test.sqlite3
+    pool: 5
+    timeout: 5000
+
+production:
+  domain_database:
+    adapter: sqlite3
+    database: db/domain.sqlite3
+    pool: 5
+    timeout: 5000
+  projection_database:
+    adapter: sqlite3
+    database: db/projection.sqlite3
+    pool: 5
+    timeout: 5000
+  drb_server:
+    protocol: druby
+    host: 127.0.0.1
+    port: 8787
+  event_connection:
+    scheme: amqp
+    userinfo: amqp:password
+    host: 127.0.0.1
+    port: 9797
+  event_exchange: events
