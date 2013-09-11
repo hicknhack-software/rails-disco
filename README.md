@@ -11,8 +11,9 @@ Finally _projections_ are your representation of your data, they get the events 
 
 # Requirements
 
-Because Rails Disco relies on [bunny](https://github.com/ruby-amqp/bunny) for sending the events from the domain to the projection, you need [RabbitMQ](http://www.rabbitmq.com/download.html) on your system.
+* At the moment Rails Disco uses [Rails 4](https://github.com/rails/rails). Maybe it works with Rails 3.2, but we didn't test that.
 
+* Because Rails Disco relies on [bunny](https://github.com/ruby-amqp/bunny) for sending the events from the domain to the projection, you need [RabbitMQ](http://www.rabbitmq.com/download.html) on your system.
 
 # Getting Started
 
