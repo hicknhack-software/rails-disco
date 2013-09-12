@@ -4,9 +4,8 @@ module Drails
       source_root File.expand_path('../templates', __FILE__)
       argument :attributes, type: :array, default: [], banner: "field[:type] field[:type]"
 
-      def create_projections
-        generate 'drails:projection', name, 'false', attr_string
-        generate 'drails:projection', name, 'true', attr_string
+      def create_models
+        generate 'drails:model', name, 'false', attr_string
       end
 
       def create_commands
@@ -38,7 +37,6 @@ module Drails
       #{method_bodies[action]}
     end"
         inject_into_file File.join('app', 'projections', class_path, "#{file_name}_projection.rb"), content, after: /(\s)*include(\s)*ActiveProjection::ProjectionType/
-        inject_into_file File.join('domain', 'projections', domain_ns, "#{file_name}_projection.rb"), content, after: /(\s)*include(\s)*ActiveDomain::Projection/
       end
 
       def method_bodies

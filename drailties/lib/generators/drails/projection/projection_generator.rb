@@ -3,7 +3,7 @@ module Drails
     class ProjectionGenerator < Rails::Generators::NamedBase
       source_root File.expand_path('../templates', __FILE__)
       argument :use_domain, type: :string, default: 'false'
-      argument :attributes, type: :array, default: [], banner: "field[:type] field[:type]"
+      argument :events, type: :array, default: [], banner: "event event"
 
       def create_projection_file
         if domain?
@@ -11,18 +11,6 @@ module Drails
         else
           template 'projection.rb', File.join('app', 'projections', class_path, "#{file_name}_projection.rb")
         end
-      end
-
-      def create_model_file
-        if domain?
-          template 'domain_model.rb', File.join('domain', 'models', domain_ns, "#{file_name}.rb")
-        else
-          template 'model.rb', File.join('app', 'models', class_path, "#{file_name}.rb")
-        end
-      end
-
-      def create_migration
-        generate 'drails:migration', "create_#{table_name}", use_domain, attributes.map { |x| "#{x.name}:#{x.type}" }.join(' ')
       end
 
       private

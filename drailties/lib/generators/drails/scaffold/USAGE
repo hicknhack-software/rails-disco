@@ -3,7 +3,7 @@ Description:
     commands, events and command_processor.
 
 Example:
-    rails generate drails:scaffold Thing
+    rails generate drails:scaffold Thing [attr1:type, attr2:type]
 
     This will create:
         app/commands/thing_create_command.rb
@@ -24,6 +24,4 @@ Example:
         db/migrate/create_thing.rb
         db/migrate_domain/create_thing.rb
         domain/command_processors/thing_processor.rb
-        domain/models/thing.rb
-        domain/projections/thing_projection.rb
         a resource route
