@@ -33,7 +33,7 @@ module Drails
       def add_to_projections(action)
         content = "
 
-    def #{name}_#{action}_event(event)
+    def #{name.underscore}_#{action}_event(event)
       #{method_bodies[action]}
     end"
         inject_into_file File.join('app', 'projections', class_path, "#{file_name}_projection.rb"), content, after: /(\s)*include(\s)*ActiveProjection::ProjectionType/

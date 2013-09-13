@@ -7,9 +7,17 @@ module Drails
 
       def create_projection_file
         if domain?
-          template 'domain_projection.rb', File.join('domain', 'projections', domain_ns, "#{file_name}_projection.rb")
+          template 'domain_projection.rb', File.join('domain', 'projections', domain_ns, "#{plural_file_name}_projection.rb")
         else
-          template 'projection.rb', File.join('app', 'projections', class_path, "#{file_name}_projection.rb")
+          template 'projection.rb', File.join('app', 'projections', class_path, "#{plural_file_name}_projection.rb")
+        end
+      end
+
+      def create_test_files
+        if domain?
+          template 'domain_projection_test.rb', File.join("test/projections", class_path, "#{plural_file_name}_projection_test.rb")
+        else
+          template 'projection_test.rb', File.join("test/projections", class_path, "#{plural_file_name}_projection_test.rb")
         end
       end
 
