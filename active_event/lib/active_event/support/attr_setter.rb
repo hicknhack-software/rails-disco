@@ -21,7 +21,7 @@ module ActiveEvent::Support
       def attributes(*args)
         super
         args.each do |attr|
-          define_method "#{attr}=", -> (value) { attributes[attr] = value }
+          define_method "#{attr}=", lambda { |value| attributes[attr] = value }
         end
       end
     end

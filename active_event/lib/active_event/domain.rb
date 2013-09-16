@@ -34,7 +34,7 @@ module ActiveEvent
         base.server_uri = 'druby://127.0.0.1:8787'
       end
 
-      def set_config(protocol: 'druby', host: 'localhost', port: 8787)
+      def set_config(protocol = 'druby', host = 'localhost', port = 8787)
         self.server_uri = "#{protocol}://#{host}:#{port}"
       end
     end
