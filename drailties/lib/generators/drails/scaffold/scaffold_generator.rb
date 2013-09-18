@@ -17,6 +17,19 @@ module Drails
         end
       end
 
+      def add_to_command_processor
+        content = "
+
+    private
+    def unique_id
+    #generate a unqiue id anyhow
+    end"
+        inject_into_file File.join('domain', 'command_processors', domain_ns, "#{file_name}_processor.rb"), content, after: /(\s)*process(\s)*(.)*CreateCommand(.)*(\n)(.)*(\n)(\s)*end/
+        content = "
+      command.id = unique_id"
+        inject_into_file File.join('domain', 'command_processors', domain_ns, "#{file_name}_processor.rb"), content, after: /(\s)*process(\s)*(.)*CreateCommand(.)*/
+      end
+
       def add_route
         route "resources :#{plural_name}"
       end
@@ -36,7 +49,7 @@ module Drails
     def #{name.underscore}_#{action}_event(event)
       #{method_bodies[action]}
     end"
-        inject_into_file File.join('app', 'projections', class_path, "#{file_name}_projection.rb"), content, after: /(\s)*include(\s)*ActiveProjection::ProjectionType/
+        inject_into_file File.join('app', 'projections', class_path, "#{plural_file_name}_projection.rb"), content, after: /(\s)*include(\s)*ActiveProjection::ProjectionType/
       end
 
       def method_bodies
