@@ -9,6 +9,7 @@ module ActiveDomain
     end
 
     def run_command(command)
+      RELOADER.execute_if_updated
       processor, method = @@routes[command.class]
       processor_instance(processor).method(method).call(command)
     end

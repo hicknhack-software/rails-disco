@@ -1,12 +1,9 @@
 module ActiveDomain
   module Autoload
-    def self.app_path=(path)
-      dirs = []
-      dirs << "#{path}/command_processors/**/*.rb"
-      dirs << "#{path}/validations/**/*.rb"
-      dirs << "#{path}/projections/**/*.rb"
-      dirs << "#{path}/models/**/*.rb"
-      ActiveEvent::Support::Autoloader.load_from dirs
+    include ActiveEvent::Support::Autoload
+    private
+    def self.dir_names
+      %W(domain/command_processors domain/validations domain/models domain/projections)
     end
   end
 end

@@ -13,6 +13,7 @@ module ActiveProjection
       event_connection.start
       begin
         event_channel.queue('', auto_delete: true).bind(event_exchange).subscribe do |delivery_info, properties, body|
+          RELOADER.execute_if_updated
           puts "Received #{properties.type} with #{body}"
           ProjectionTypeRegistry.process(properties.headers.deep_symbolize_keys, Object.const_get(properties.type).new((JSON.parse body).deep_symbolize_keys))
         end

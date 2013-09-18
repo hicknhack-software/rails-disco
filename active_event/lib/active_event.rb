@@ -18,6 +18,7 @@ module ActiveEvent
 
     autoload :AttrInitializer
     autoload :AttrSetter
+    autoload :Autoload
     autoload :Autoloader
   end
 

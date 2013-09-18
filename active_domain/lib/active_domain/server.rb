@@ -13,7 +13,6 @@ module ActiveDomain
     end
 
     def run
-      ActiveEvent::ValidationsRegistry.build
       ActiveRecord::Base.establish_connection options[:domain_database]
       ActiveEvent::EventServer.start options
       drb_uri = URI::Generic.build(options[:drb_server]).to_s
