@@ -19,14 +19,7 @@ module Drails
 
       def add_to_command_processor
         content = "
-
-    private
-    def unique_id
-    #generate a unqiue id anyhow
-    end"
-        inject_into_file File.join('domain', 'command_processors', domain_ns, "#{file_name}_processor.rb"), content, after: /(\s)*process(\s)*(.)*CreateCommand(.)*(\n)(.)*(\n)(\s)*end/
-        content = "
-      command.id = unique_id"
+      command.id = ActiveDomain::UniqueCommandIdRepository.new_for command.class.name"
         inject_into_file File.join('domain', 'command_processors', domain_ns, "#{file_name}_processor.rb"), content, after: /(\s)*process(\s)*(.)*CreateCommand(.)*/
       end
 

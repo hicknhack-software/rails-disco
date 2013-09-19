@@ -14,4 +14,6 @@ module ActiveDomain
 
   autoload :Event, (File.expand_path '../../app/models/active_domain/event', __FILE__)
   autoload :EventRepository, (File.expand_path '../../app/models/active_domain/event_repository',__FILE__)
+  autoload :UniqueCommandId, (File.expand_path '../../app/models/active_domain/unique_command_id', __FILE__)
+  autoload :UniqueCommandIdRepository, (File.expand_path '../../app/models/active_domain/unique_command_id_repository',__FILE__)
 end

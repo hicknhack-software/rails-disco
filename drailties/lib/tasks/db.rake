@@ -86,6 +86,7 @@ namespace :db do
   task :setup_domain do
     Rake::Task[:'db:configuration'].invoke('domain')
     cp_r Gem::Specification.find_by_name('active_event').gem_dir + '/db/migrate/.', 'db/migrate_domain'
+    cp_r Gem::Specification.find_by_name('active_domain').gem_dir + '/db/migrate/.', 'db/migrate_domain'
     Rake::Task[:'db:migrate'].invoke
   end
 

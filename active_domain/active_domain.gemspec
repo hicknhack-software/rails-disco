@@ -13,7 +13,7 @@ Gem::Specification.new do |s|
   
   s.license       = 'MIT'
 
-  s.files         = Dir['{app,lib}/**/*', 'README.md', 'MIT-LICENSE']
+  s.files         = Dir['{app,db,lib}/**/*', 'README.md', 'MIT-LICENSE']
   s.require_path = 'lib'
   s.test_files    = Dir['spec/**/*']
 
