@@ -12,16 +12,27 @@ module ActiveEvent::Support
       end
     end
 
-    def self.reload(module_name, path)
-      Object.send(:remove_const, module_name) if Object.const_defined?(module_name)
+    def self.reload(name, path)
+      const_name, namespace_name = name.to_s.split('::').reverse
+      if namespace_name.nil?
+        Object.send(:remove_const, const_name) if Object.const_defined?(const_name)
+      else
+        namespace = const_get(namespace_name)
+        namespace.send(:remove_const, const_name) if namespace.const_defined?(const_name)
+      end
       $".delete_if { |s| s.include?(path) }
       require path
     end
 
     private
     def self.get_module_name(path)
-      path.split('/').last.split('.').first.camelcase.to_sym
+      segments = path.split('/')
+      seg = if 1 == (segments.length - 2) - (segments.index('app') || segments.index('domain')) #no namespace
+              segments.last.split('.').first
+            else
+              [segments[-2], segments.last.split('.').first].join('/')
+            end
+      seg.camelcase.to_sym
     end
-
   end
 end
