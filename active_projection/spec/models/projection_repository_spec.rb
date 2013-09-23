@@ -4,7 +4,7 @@ require_relative '../support/active_record'
 describe ActiveProjection::ProjectionRepository do
   before :all do
     5.times do |i|
-      FactoryGirl.create :projection, id: i, class_name: "TestProjection#{i}"
+      FactoryGirl.create :projection, id: i, class_name: "TestProjection#{i}", last_id: 5 - i
     end
   end
   describe 'create_or_get' do
@@ -24,4 +24,7 @@ describe ActiveProjection::ProjectionRepository do
       expect(ActiveProjection::Projection.where(id:0).first.solid).to be_false
     end
   end
+    it 'returns array of last ids' do
+      expect(ActiveProjection::ProjectionRepository.last_ids).to eq [5,4,3,2,1]
+    end
 end

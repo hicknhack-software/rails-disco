@@ -10,6 +10,7 @@ module ActiveEvent
   autoload :Domain
   autoload :EventServer
   autoload :EventType
+  autoload :ReplayServer
   autoload :Validations
   autoload :ValidationsRegistry
 

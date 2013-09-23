@@ -1,8 +1,8 @@
 module ActiveProjection
   class ProjectionRepository
 
-    def self.all
-      Projection.all
+    def self.last_ids
+      Projection.all.to_a.map { |p| p.last_id }
     end
 
     def self.get_last_id(id)

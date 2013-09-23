@@ -6,15 +6,17 @@ describe ActiveEvent::EventServer do
     @server = ActiveEvent::EventServer.instance
     @event = TestEvent.new
   end
-  it 'resends requests' do
-    allow(@event).to receive(:event)
-    allow(@event).to receive(:id)
-    allow(@event).to receive(:data).and_return({})
-    expect(ActiveEvent::EventType).to receive(:create_instance).twice.and_return(Object)
-    expect(Object).to receive(:add_store_infos).twice
-    expect(ActiveEvent::EventRepository).to receive(:after_id).and_return([@event, @event])
-    expect(@server.class).to receive(:publish).twice
-    @server.class.resend_events_after 1
+  describe 'resend_events_after' do
+    it 'starts the replay server if its not running' do
+      expect(ActiveEvent::ReplayServer).to receive(:start)
+      @server.resend_events_after(1).join
+    end
+
+    it 'updates the replay server if its running' do
+      @server.instance_variable_set(:@replay_server_thread, Thread.new {sleep 1})
+      expect(ActiveEvent::ReplayServer).to receive(:update)
+      @server.resend_events_after 1
+    end
   end
 
   it 'publishes an event' do

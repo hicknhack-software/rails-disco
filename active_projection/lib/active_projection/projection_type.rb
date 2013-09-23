@@ -20,7 +20,7 @@ module ActiveProjection
     end
 
     def evaluate(headers)
-      return false unless ProjectionRepository.solid? projection_id #projection is broken and shouldn't process any incoming event
+      return false unless ProjectionRepository.solid? projection_id || headers[:replayed]# process only replayed events if projection is broken
       last_id = ProjectionRepository.get_last_id projection_id
       case
         when last_id + 1 == headers[:store_id] #process incoming event
