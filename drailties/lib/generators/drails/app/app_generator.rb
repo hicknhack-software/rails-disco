@@ -16,6 +16,10 @@ module Drails
         copy_file 'build_validations_registry.rb', File.join('config', 'initializers', 'build_validations_registry.rb')
       end
 
+      def copy_sse_controller
+        copy_file 'event_source_controller.rb', File.join('app', 'controllers', 'event_source_controller.rb')
+      end
+
       def add_drails_to_gemfile
         gem "rails-disco"
       end

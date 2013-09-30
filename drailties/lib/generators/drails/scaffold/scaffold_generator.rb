@@ -31,6 +31,16 @@ module Drails
         generate 'drails:controller', name, attr_string
       end
 
+      def copy_event_stream_client
+        copy_file '_eventstream.js.erb', File.join('app', 'views', plural_file_name, '_eventstream.js.erb')
+      end
+
+      def add_event_stram_client_to_views
+        include_text = '<%= javascript_tag render partial: \'eventstream\', formats: [:js], locals: {event_id: @event_id} %>'
+        prepend_to_file File.join('app', 'views', plural_file_name, 'index.html.erb'), include_text
+        prepend_to_file File.join('app', 'views', plural_file_name, 'show.html.erb'), include_text
+      end
+
       private
       def attr_string
         @attr_string ||= attributes.map { |x| "#{x.name}:#{x.type}" }.join(' ')

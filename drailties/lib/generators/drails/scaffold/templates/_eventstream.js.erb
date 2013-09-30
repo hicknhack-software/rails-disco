@@ -1,0 +1,16 @@
+<% if event_id.present? %>
+    $(document).ready(function () {
+        setTimeout(function () {
+            var source = new EventSource('/event_stream');
+            source.addEventListener('refresh', function (e) {
+                var event = JSON.parse(e.data);
+                if (<%= event_id %> == event.id){
+                    window.location.reload();
+                }else if (<%= event_id %> < event.id){
+                    source.removeEventListener('refresh');
+                    source.close();
+                }
+            });
+        }, 1);
+    });
+<% end %>
