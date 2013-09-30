@@ -20,9 +20,13 @@ module ActiveEvent
     include ActiveModel::Validations
 
     def is_valid_do(&block)
-      valid = valid?
-      block.call() if valid
-      valid
+      if valid?
+        block.call
+      else
+        false
+      end
+    rescue
+      false
     end
   end
 end
