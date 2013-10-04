@@ -1,6 +1,6 @@
 language: ruby
 
-script: "rake test"
+script: rake test
 
 rvm:
   - 1.9.3
