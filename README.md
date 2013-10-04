@@ -1,4 +1,4 @@
-# Rails Disco - A distributed party with commands, events and projections [![Code Climate](https://codeclimate.com/github/hicknhack-software/rails-disco.png)](https://codeclimate.com/github/hicknhack-software/rails-disco)
+# Rails Disco - A distributed party with commands, events and projections [![Code Climate](https://codeclimate.com/github/hicknhack-software/rails-disco.png)](https://codeclimate.com/github/hicknhack-software/rails-disco) [![Build Status](https://travis-ci.org/hicknhack-software/rails-disco.png?branch=master)](https://travis-ci.org/hicknhack-software/rails-disco)
 
 Rails Disco is a framework on top of the rails framework to provide cqrs and simple event sourcing possibilities to rails.
 The framework consists out of three main parts, commands, events and projections.

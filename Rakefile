@@ -9,7 +9,7 @@ task :release => "all:release"
 
 desc "Run all tests"
 task :test do
-	sh "cd active_event && bundle exec rspec"
-	sh "cd active_projection && bundle exec rspec"
-	sh "cd active_domain && bundle exec rspec"
+	sh "cd active_event && bundle install && bundle exec rspec"
+	sh "cd active_projection && bundle install && bundle exec rspec"
+	sh "cd active_domain && bundle install && bundle exec rspec"
 end
