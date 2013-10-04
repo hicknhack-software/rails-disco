@@ -1,9 +1,6 @@
 language: ruby
 
-script:
-  - "cd active_event && bundle install && bundle exec rspec"
-  - "cd active_projection && bundle install && bundle exec rspec"
-  - "cd active_domain && bundle install && bundle exec rspec"
+script: rake test
 
 rvm:
   - 1.9.3
