@@ -5,11 +5,12 @@ gemspec
 gem 'drailties', path: 'drailties'
 
 group :test do
-  gem 'rspec'
-  gem 'factory_girl'
+  gem 'rspec', require: false
+  gem 'factory_girl', require: false
+  gem 'coveralls', require: false
 end
 
-platforms :ruby do
+platforms :ruby, :mswin, :mingw do
   gem 'sqlite3'
 end
 
