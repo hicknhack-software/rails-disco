@@ -5,7 +5,7 @@ Gem::Specification.new do |s|
   s.version       = version
 
   s.authors       = 'Andreas Reischuck'
-  s.email         = 'andreas.reischuck@hicknhack-software.com'
+  s.email         = 'rails-disco@hicknhack-software.com'
   s.homepage      = 'https://github.com/hicknhack-software/rails-disco'
 
   s.summary       = 'Domain related stuff (part of rails-disco)'

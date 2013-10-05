@@ -4,8 +4,8 @@ Gem::Specification.new do |s|
   s.name        = 'rails-disco'
   s.version     = version
 
-  s.authors     = 'Robert Kranz'
-  s.email       = 'robert.kranz@hicknhack-software.com'
+  s.authors     = ['Robert Kranz', 'Andreas Reischuck']
+  s.email       = 'rails-disco@hicknhack-software.com'
   s.homepage    = 'https://github.com/hicknhack-software/rails-disco'
   
   s.summary     = 'A distributed party with commands, events and projections'
