@@ -1,4 +1,7 @@
 source 'https://rubygems.org'
 
-# Specify your gem's dependencies in drailties.gemspec
 gemspec
+
+gem 'active_event', path: '../active_event'
+gem 'active_domain', path: '../active_domain'
+gem 'active_projection', path: '../active_projection'
