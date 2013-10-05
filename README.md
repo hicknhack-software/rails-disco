@@ -1,4 +1,7 @@
-[![Build Status](https://travis-ci.org/hicknhack-software/rails-disco.png?branch=master)](https://travis-ci.org/hicknhack-software/rails-disco) [![Dependency Status](https://gemnasium.com/hicknhack-software/rails-disco.png)](https://gemnasium.com/hicknhack-software/rails-disco) [![Code Climate](https://codeclimate.com/github/hicknhack-software/rails-disco.png)](https://codeclimate.com/github/hicknhack-software/rails-disco)
+[![Build Status](https://travis-ci.org/hicknhack-software/rails-disco.png?branch=master)](https://travis-ci.org/hicknhack-software/rails-disco) 
+[![Coverage Status](https://coveralls.io/repos/hicknhack-software/rails-disco/badge.png)](https://coveralls.io/r/hicknhack-software/rails-disco)
+[![Dependency Status](https://gemnasium.com/hicknhack-software/rails-disco.png)](https://gemnasium.com/hicknhack-software/rails-disco) 
+[![Code Climate](https://codeclimate.com/github/hicknhack-software/rails-disco.png)](https://codeclimate.com/github/hicknhack-software/rails-disco)
 
 # Rails Disco - A distributed party with commands, events and projections 
 
