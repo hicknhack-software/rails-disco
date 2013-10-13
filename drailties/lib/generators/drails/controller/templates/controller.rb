@@ -18,7 +18,7 @@ class <%= controller_class_name %>Controller < ApplicationController
   end
 
   def create
-    <%= singular_table_name %> = <%= "#{human_name}"%>CreateCommand.new({<%= params_string %>})
+    <%= singular_table_name %> = <%= command_class_name('create') %>Command.new({<%= params_string %>})
     valid = <%= singular_table_name %>.valid?
     if valid and id = Domain.run_command(<%= singular_table_name %>)
       flash[:notice] = <%= "'#{human_name} was successfully created.'" %>
@@ -31,7 +31,7 @@ class <%= controller_class_name %>Controller < ApplicationController
   end
 
   def update
-    <%= singular_table_name %> = <%= "#{human_name}"%>UpdateCommand.new({id: params[:id]<%=',' unless params_string == ''%> <%= params_string %>})
+    <%= singular_table_name %> = <%= command_class_name('update') %>Command.new({id: params[:id]<%=',' unless params_string == ''%> <%= params_string %>})
     valid = <%= singular_table_name %>.valid?
     if valid and id = Domain.run_command(<%= singular_table_name %>)
       flash[:notice] = <%= "'#{human_name} was successfully updated.'" %>
@@ -44,7 +44,7 @@ class <%= controller_class_name %>Controller < ApplicationController
   end
 
   def destroy
-    <%= singular_table_name %> = <%= "#{human_name}"%>DeleteCommand.new({id: params[:id]})
+    <%= singular_table_name %> = <%= command_class_name('delete') %>Command.new({id: params[:id]})
     if id = Domain.run_command(<%= singular_table_name %>)
       session[:tmp_event_id] = id
       flash[:notice] = <%= "'#{human_name} was successfully deleted.'" %>

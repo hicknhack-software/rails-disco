@@ -2,10 +2,12 @@ Description:
     Generates a projection with handlers for the given events.
 
 Example:
-    rails generate drails:projection Thing [use_domain] [event1 event2 ...]
+    rails generate drails:projection Thing [event event]
 
-    This will create if use_domain is false(standard):
+    This will create:
         app/projection/thing_projection.rb
 
-    This will create if use_domain is true:
+    rails generate drails:projection --domain Thing [event event]
+
+    This will create:
         domain/projection/thing_projection.rb

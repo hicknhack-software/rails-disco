@@ -10,7 +10,14 @@ module Drails
         template "controller_test.rb", File.join("test/controllers", controller_class_path, "#{controller_file_name}_controller_test.rb")
       end
 
+      protected
+
+      def command_class_name(command)
+        (class_path + ["#{command}_#{file_name}"]).map(&:camelize) * '::'
+      end
+
       private
+      
       def params_string
         attributes.map { |x| "#{x.name}: params[:#{singular_table_name}][:#{x.name}]" }.join(', ')
       end

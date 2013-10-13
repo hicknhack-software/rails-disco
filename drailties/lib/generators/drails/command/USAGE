@@ -2,10 +2,10 @@ Description:
     Generates a Command, an Event and adds it to the CommandProcessor or creates one.
 
 Example:
-    rails generate drails:command ThingCreate
+    rails generate drails:command CreateThing --event=CreatedThing --processor=Things
 
     This will create:
-        app/commands/thing_create_command.rb
-        app/events/thing_create_event.rb
-        domain/command_processors/thing_processor.rb if it not exists
-        Adds a method to this or the existing processor
+        app/commands/create_thing_command.rb
+        app/events/created_thing_event.rb
+        domain/command_processors/things_processor.rb unless it exists
+        Adds a command handler to this or the existing processor

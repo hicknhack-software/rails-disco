@@ -1,12 +1,12 @@
 require 'rails/generators/active_record/migration/migration_generator'
+require 'generators/drails/use_domain_option.rb'
+
 module Drails
   module Generators
     class MigrationGenerator < ActiveRecord::Generators::MigrationGenerator
       source_root File.expand_path('../templates', __FILE__)
       hide!
-      remove_argument :attibutes
-      argument :use_domain, type: :string, default: 'false'
-      argument :attributes, type: :array, default: [], banner: "field[:type] field[:type]"
+      include UseDomainOption
 
       def create_migration_file
         set_local_assigns!
@@ -15,8 +15,9 @@ module Drails
       end
 
       private
+
       def migration_dir
-        if (/^(true|t|yes|y|1)$/i).match(use_domain)
+        if use_domain?
           'migrate_domain'
         else
           'migrate'

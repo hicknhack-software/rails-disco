@@ -16,7 +16,7 @@ module ActiveDomain
     end
 
     def invoke(event)
-      event_type = event.class.name.split('::').last.to_sym
+      event_type = event.class.name.to_s
       return unless handlers.has_key? event_type
       handlers[event_type].each do |handler_method|
         handler_method.owner.new.send handler_method.name, event
@@ -35,7 +35,7 @@ module ActiveDomain
       self.class.registry.freeze.each do |handler|
         handler.public_instance_methods(false).each do |method_name|
           method = handler.instance_method method_name
-          event_type = method_name.to_s.camelcase.to_sym
+          event_type = (method_name.to_s.split('__')*'/').camelcase
           raise TooManyArgumentsError if 1 != method.arity
           handlers[event_type] << method
         end
