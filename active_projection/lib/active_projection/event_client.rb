@@ -14,6 +14,8 @@ module ActiveProjection
       listen_for_events
       request_missing_events
       event_channel.work_pool.join
+    rescue Interrupt
+      puts 'Catching Interrupt'
     end
 
     def listen_for_events
