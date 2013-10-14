@@ -3,7 +3,7 @@ require 'logger'
 require 'active_record'
 
 namespace :db do
-  def create_database config
+  def create_database(config)
     options = {:charset => 'utf8', :collation => 'utf8_unicode_ci'}
 
     create_db = lambda do |config|
@@ -38,16 +38,18 @@ namespace :db do
     DATABASE_ENV = ENV['DATABASE_ENV'] || 'development'
   end
 
-  task :environment, [:file_name] => [:db_env] do |t, args|
-    if args.file_name == 'domain'
+  task :environment => :db_env do
+    if ENV['ENV'] == 'domain'
       @migration_dir = ENV['MIGRATIONS_DIR'] || 'db/migrate_domain'
+      @env = 'domain'
     else
       @migration_dir = ENV['MIGRATIONS_DIR'] || 'db/migrate'
+      @env = 'projection'
     end
   end
 
-  task :configuration, [:file_name] => [:environment] do |t, args|
-    @config = YAML.load_file("config/disco.yml")[DATABASE_ENV]["#{args.file_name}_database"]
+  task :configuration => :environment do
+    @config = YAML.load_file("config/disco.yml")[DATABASE_ENV]["#{@env}_database"]
   end
 
   task :configure_connection => :configuration do
@@ -55,23 +57,17 @@ namespace :db do
     ActiveRecord::Base.logger = Logger.new STDOUT if @config['logger']
   end
 
-  desc 'Create the database from config/disco.yml for the current DATABASE_ENV'
+  desc 'Create the database from config/disco.yml for the current DATABASE_ENV (options: ENV=(projection|domain))'
   task :create => :configure_connection do
     create_database @config
   end
 
-  desc 'Drops the database for the current DATABASE_ENV'
+  desc 'Drops the database for the current DATABASE_ENV (options: ENV=(projection|domain))'
   task :drop => :configure_connection do
     ActiveRecord::Base.connection.drop_database @config['database']
   end
 
-  desc 'Migrate the database (options: VERSION=x, VERBOSE=false).'
-  task :migrate => :configure_connection do
-    ActiveRecord::Migration.verbose = true
-    ActiveRecord::Migrator.migrate @migration_dir, ENV['VERSION'] ? ENV['VERSION'].to_i : nil
-  end
-
-  desc 'Rolls the schema back to the previous version (specify steps w/ STEP=n).'
+  desc 'Rolls the schema back to the previous version (specify steps w/ STEP=n) (options: ENV=(projection|domain)).'
   task :rollback => :configure_connection do
     step = ENV['STEP'] ? ENV['STEP'].to_i : 1
     ActiveRecord::Migrator.rollback @migration_dir, step
@@ -82,28 +78,44 @@ namespace :db do
     puts "Current version: #{ActiveRecord::Migrator.current_version}"
   end
 
-  desc 'Migrates the domain database (for use in multi project setup)'
+  desc 'Copys the migrations files from the gems directories (options: ENV=(projection|domain))'
+  task :copy_migrations => :environment do
+    if @env == 'domain'
+      cp_r Gem::Specification.find_by_name('active_event').gem_dir + '/db/migrate/.', @migration_dir
+      cp_r Gem::Specification.find_by_name('active_domain').gem_dir + '/db/migrate/.', @migration_dir
+    else
+      cp_r Gem::Specification.find_by_name('active_projection').gem_dir + '/db/migrate/.', @migration_dir
+    end
+  end
+
+  desc 'Migrates the database (options: VERSION=x, ENV=(projection|domain))'
+  task :migrate => :configure_connection do
+    ActiveRecord::Migration.verbose = true
+    ActiveRecord::Migrator.migrate @migration_dir, ENV['VERSION'] ? ENV['VERSION'].to_i : nil
+  end
+
+  desc 'Copys the domain migrations and migrates the domain database'
   task :setup_domain do
-    Rake::Task[:'db:configuration'].invoke('domain')
-    cp_r Gem::Specification.find_by_name('active_event').gem_dir + '/db/migrate/.', 'db/migrate_domain'
-    cp_r Gem::Specification.find_by_name('active_domain').gem_dir + '/db/migrate/.', 'db/migrate_domain'
+    ENV['ENV'] = 'domain'
+    Rake::Task[:'db:copy_migrations'].invoke
     Rake::Task[:'db:migrate'].invoke
   end
 
-  desc 'Migrates the projection database (for use in multi project setup)'
+  desc 'Copys the projection migrations and migrates the projection database'
   task :setup_projection do
-    Rake::Task[:'db:configuration'].invoke('projection')
-    cp_r Gem::Specification.find_by_name('active_projection').gem_dir + '/db/migrate/.', 'db/migrate'
+    ENV['ENV'] = 'projection'
+    Rake::Task[:'db:copy_migrations'].invoke
     Rake::Task[:'db:migrate'].invoke
   end
 
-  desc 'Migrates the domain and the projection database (for use in single project setup)'
+  desc 'Copys the gem migrations and migrates the domain and the projection database after'
   task :setup do
     Rake::Task[:'db:setup_domain'].invoke
     Rake::Task[:'db:environment'].reenable
     Rake::Task[:'db:configure_connection'].reenable
     Rake::Task[:'db:configuration'].reenable
     Rake::Task[:'db:migrate'].reenable
+    Rake::Task[:'db:copy_migrations'].reenable
     Rake::Task[:'db:setup_projection'].invoke
   end
 end
