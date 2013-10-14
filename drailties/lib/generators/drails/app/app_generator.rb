@@ -20,6 +20,10 @@ module Drails
         copy_file 'event_source_controller.rb', File.join('app', 'controllers', 'event_source_controller.rb')
       end
 
+      def add_sse_route
+        route "get 'event_stream' => 'event_source#stream'"
+      end
+
       def add_drails_to_gemfile
         gem "rails-disco"
       end

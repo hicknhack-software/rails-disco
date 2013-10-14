@@ -31,7 +31,7 @@ module Drails
         inject_into_file File.join('domain/command_processors', domain_class_path, "#{processor_file_name}_processor.rb"), content, after: /(\s)*process(\s)*(.)*CreateCommand(.)*/
       end
 
-      def add_route
+      def add_routes
         route "resources :#{plural_name}"
       end
 

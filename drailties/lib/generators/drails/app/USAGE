@@ -5,6 +5,8 @@ Example:
     rails generate drails:app
 
     This will create:
+        app/controllers/event_source_controller.rb
+        a route for this controller
         config/build_validations_registry.rb
         config/initializers/create_domain.rb
         config/disco.yml
