@@ -1,4 +1,3 @@
-require 'reloader/sse'
 require 'bunny'
 module ActiveEvent
   module EventSourceServer

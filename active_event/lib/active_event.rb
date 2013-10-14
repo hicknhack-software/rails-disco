@@ -9,8 +9,10 @@ module ActiveEvent
   autoload :Command
   autoload :Domain
   autoload :EventServer
+  autoload :EventSourceServer
   autoload :EventType
   autoload :ReplayServer
+  autoload :SSE
   autoload :Validations
   autoload :ValidationsRegistry
 
