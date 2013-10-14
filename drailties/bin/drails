@@ -25,7 +25,6 @@ where COMMAND is one of:
   domainserver(ds)        start the domain server
   projectionserver(ps)    start the projection server
   server(s)               start both server
-  rake                    start a rake task
 EOT
 
 command = ARGV.shift

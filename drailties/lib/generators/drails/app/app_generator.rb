@@ -27,6 +27,12 @@ module Drails
       def add_drails_to_gemfile
         gem "rails-disco"
       end
+
+      def enable_rake_tasks
+        content = "
+require 'rails-disco/tasks'"
+        inject_into_file File.join('config/application.rb'), content, after: /require 'rails\/all'/
+      end
     end
   end
 end
