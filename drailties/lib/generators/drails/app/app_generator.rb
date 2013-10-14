@@ -33,6 +33,11 @@ module Drails
 require 'rails-disco/tasks'"
         inject_into_file File.join('config/application.rb'), content, after: /require 'rails\/all'/
       end
+
+      def enable_concurrency
+        application 'config.preload_frameworks = true'
+        application 'config.allow_concurrency = true'
+      end
     end
   end
 end
