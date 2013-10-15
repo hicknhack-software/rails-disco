@@ -32,7 +32,15 @@ module Drails
       end
 
       def add_routes
-        route "resources :#{plural_name}"
+        routing_code = ""
+        class_path.each_with_index do |ns, i|
+          add_line_with_indent routing_code, (i + 1), "namespace :#{ns} do"
+        end
+        add_line_with_indent routing_code, (class_path.length + 1), "resources :#{plural_name}"
+        class_path.each_with_index do |ns, i|
+          add_line_with_indent routing_code, (class_path.length - i), "end"
+        end
+        route routing_code[2..-1]
       end
 
       def create_controller
@@ -71,6 +79,9 @@ module Drails
             'update' => "#{class_name}.find(event.id).update! event.values",
             'delete' => "#{class_name}.find(event.id).destroy!",
         }
+      end
+      def add_line_with_indent(target, indent, str)
+        target << "#{"  " * indent}#{str}\n"
       end
     end
   end
