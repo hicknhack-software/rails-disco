@@ -7,7 +7,7 @@ Example:
     This will create:
         app/projection/thing_projection.rb
 
-    rails generate drails:projection --domain Thing [event event]
+    rails generate drails:projection Thing [event event] --domain
 
     This will create:
         domain/projections/domain/thing_projection.rb

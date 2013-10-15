@@ -9,7 +9,7 @@ Example:
         app/models/thing.rb
         db/migrate/create_thing.rb
 
-    rails generate drails:model --domain Thing [attr1:type, attr2:type]
+    rails generate drails:model Thing [attr1:type, attr2:type] --domain
 
     This will create:
         domain/projections/domain/thing_projection.rb
