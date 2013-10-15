@@ -32,11 +32,20 @@ module Drails
         content = "
 require 'rails-disco/tasks'"
         inject_into_file File.join('config/application.rb'), content, after: /require 'rails\/all'/
+      rescue Exception
+        puts "Seems like you invoked it from an engine, so put\n
+        require 'rails-disco/tasks'\n
+        in your application.rb from the main application to have the rails disco rake tasks available"
       end
 
       def enable_concurrency
         application 'config.preload_frameworks = true'
         application 'config.allow_concurrency = true'
+      rescue Exception
+        puts "Seems like you invoked it from an engine, so remember to put\n
+        config.preload_frameworks = true
+        config.allow_concurrency = true\n
+        in your application.rb from the main application"
       end
     end
   end
