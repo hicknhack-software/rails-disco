@@ -8,4 +8,4 @@ Example:
         app/commands/create_thing_command.rb
         app/events/created_thing_event.rb
         domain/command_processors/things_processor.rb unless it exists
-        Adds a command handler to this or the existing processor
+        Adds a command handler to this or an existing processor

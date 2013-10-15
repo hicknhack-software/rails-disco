@@ -10,3 +10,4 @@ Example:
         config/build_validations_registry.rb
         config/initializers/create_domain.rb
         config/disco.yml
+        adds rails-disco to your gemfile

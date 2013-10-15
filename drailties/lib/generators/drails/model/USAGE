@@ -12,6 +12,6 @@ Example:
     rails generate drails:model --domain Thing [attr1:type, attr2:type]
 
     This will create:
-        domain/projection/thing_projection.rb
-        domain/models/thing.rb
+        domain/projections/domain/thing_projection.rb
+        domain/models/domain/thing.rb
         db/migrate_domain/create_thing.rb

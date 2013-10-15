@@ -17,7 +17,8 @@ Example:
         app/projections/things_projection.rb
         db/migrate/create_things.rb
         app/models/thing.rb
-        app/helpers/thing_helper.rb
+        app/helpers/things_helper.rb
+        app/views/things/_eventstream.js.erb
         app/views/things/_form.html.erb
         app/views/things/edit.html.erb
         app/views/things/index.html.erb

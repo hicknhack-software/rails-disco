@@ -10,4 +10,4 @@ Example:
     rails generate drails:projection --domain Thing [event event]
 
     This will create:
-        domain/projection/thing_projection.rb
+        domain/projections/domain/thing_projection.rb
