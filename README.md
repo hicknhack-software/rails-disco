@@ -20,6 +20,8 @@ Finally _projections_ are your representation of your data, they get the events 
 
 * Because Rails Disco relies on [bunny](https://github.com/ruby-amqp/bunny) for sending the events from the domain to the projection, you need [RabbitMQ](http://www.rabbitmq.com/download.html) on your system.
 
+* Any Server which is capable of streaming, e.g. puma or thin. (Standard Rails Server Webrick will **not** work)
+
 # Getting Started
 
 1. Rails Disco depends heavily on [RubyOnRails](http://rubyonrails.org/), so you should install that first if you haven't yet.
@@ -43,7 +45,7 @@ Finally _projections_ are your representation of your data, they get the events 
 
    This will create the two databases domain and projection (for database details look in config/disco.yml)
 
-5. If you just want to look a some standard server output, start the drails server. Else go ahead and skip this point.
+5. If you just want to look a some standard server output, start the drails server (Remember to use a server which is capable of streaming, which means not Webrick). Else go ahead and skip this point.
 
 		drails server
 
