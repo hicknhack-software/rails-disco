@@ -56,10 +56,10 @@ module ActiveEvent
       false
     end
 
-    def republish(e)
-      type = e.event
-      body = e.data.to_json
-      resend_exchange.publish body, {type: type, headers: {store_id: e.id, replayed: true}}
+    def republish(event)
+      type = event.event
+      body = event.data.to_json
+      resend_exchange.publish body, {type: type, headers: {id: event.id, created_at: event.created_at, replayed: true}}
       puts "Republished #{type} with #{body}"
     end
 

@@ -15,7 +15,7 @@ module ActiveProjection
     def process(headers, event)
       projections.each do |projection|
         ActiveRecord::Base.transaction do
-          projection.invoke event if projection.evaluate headers
+          projection.invoke(event, headers) if projection.evaluate headers
         end
       end
     end

@@ -40,7 +40,7 @@ describe ActiveProjection::ProjectionType do
       it 'rejects processing, if projection is broken' do
         expect(ActiveProjection::ProjectionRepository).to receive(:solid?).and_return(false)
         expect(ActiveProjection::ProjectionRepository).to_not receive(:get_last_id)
-        @projection.evaluate({store_id: 1})
+        @projection.evaluate({id: 1})
       end
 
       describe 'with solid projection' do
@@ -51,16 +51,16 @@ describe ActiveProjection::ProjectionType do
 
         it 'processes event with the correct id' do
           expect(ActiveProjection::ProjectionRepository).to receive(:set_last_id).with(0, 6)
-          expect(@projection.evaluate({store_id: 6})).to be_true
+          expect(@projection.evaluate({id: 6})).to be_true
         end
 
         it 'rejects event with last id smaller event id' do
-          expect(@projection.evaluate({store_id: 3})).to be_false
+          expect(@projection.evaluate({id: 3})).to be_false
         end
 
         it 'rejects event with last greater equal event id' do
           expect(ActiveProjection::ProjectionRepository).to receive(:set_broken).with(0)
-          expect(@projection.evaluate({store_id: 7})).to be_false
+          expect(@projection.evaluate({id: 7})).to be_false
         end
       end
     end

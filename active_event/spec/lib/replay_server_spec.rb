@@ -9,7 +9,7 @@ describe ActiveEvent::ReplayServer do
 
   it 'republishes an event' do
     allow(@server).to receive(:resend_exchange).and_return(Object)
-    expect(@server.resend_exchange).to receive(:publish).with("{\"bla\":\"Test2\"}", {:type => "TestEvent", :headers => {store_id: 0, replayed: true}})
+    expect(@server.resend_exchange).to receive(:publish).with("{\"bla\":\"Test2\"}", {:type => "TestEvent", :headers => {id: 0, replayed: true}})
     expect(@event).to receive(:event).and_return(@event.class.name)
     expect(@event).to receive(:data).and_return(bla: 'Test2')
     expect(@event).to receive(:id).and_return(0)

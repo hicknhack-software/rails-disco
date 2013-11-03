@@ -21,7 +21,7 @@ module ActiveDomain
       store event
       publish event
       invoke event
-      event.store_infos[:store_id]
+      event.store_infos[:id]
     end
 
     private
