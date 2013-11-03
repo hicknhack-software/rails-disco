@@ -14,7 +14,7 @@ module ActiveEvent::Support
 
     # override to skip the freezing!
     def init_attributes(attributes)
-      self.attributes = attributes
+      self.attributes = attributes.symbolize_keys
     end
 
     module ClassMethods

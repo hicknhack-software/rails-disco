@@ -55,7 +55,7 @@ module ActiveEvent::Support
     attr_accessor :attributes
 
     def init_attributes(attributes)
-      self.attributes = attributes.dup
+      self.attributes = attributes.symbolize_keys
       freeze
     end
 
@@ -66,7 +66,7 @@ module ActiveEvent::Support
       if attributes.respond_to?(:permitted?) and not attributes.permitted?
         raise ActiveEvent::Support::ForbiddenAttributesError
       end
-      (attributes.keys - self.class.attribute_keys).each do |k|
+      (attributes.keys.map(&:to_sym) - self.class.attribute_keys).each do |k|
         raise ActiveEvent::Support::UnknownAttributeError, "unknown attribute: #{k}"
       end
     end
