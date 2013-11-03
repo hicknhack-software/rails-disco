@@ -16,7 +16,7 @@ module ActiveDomain
       ActiveRecord::Base.establish_connection options[:domain_database]
       ActiveEvent::EventServer.start options
       drb_uri = URI::Generic.build(options[:drb_server]).to_s
-      DRb.start_service(drb_uri, domain)
+      DRb.start_service(drb_uri, domain, options.fetch(:drb_config, {}))
       DRb.thread.join
     rescue Interrupt
       puts 'Catching Interrupt'
@@ -52,6 +52,9 @@ module ActiveDomain
               scheme: 'druby',
               hostname: '127.0.0.1',
               port: 8787,
+          },
+          drb_config: {
+              verbose: true,
           },
           domain_database: {
               adapter: 'sqlite3',
