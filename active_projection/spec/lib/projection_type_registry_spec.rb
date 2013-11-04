@@ -14,9 +14,10 @@ describe ActiveProjection::ProjectionTypeRegistry do
   end
 
   it 'invokes event handlers' do
+    headers = {}
     event = TestEvent.new
-    expect_any_instance_of(TestProjection).to receive(:evaluate).with('test').and_return(true)
-    expect_any_instance_of(TestProjection).to receive(:invoke).with(event)
-    ActiveProjection::ProjectionTypeRegistry.process('test', event)
+    expect_any_instance_of(TestProjection).to receive(:evaluate).with(headers).and_return(true)
+    expect_any_instance_of(TestProjection).to receive(:invoke).with(event, headers)
+    ActiveProjection::ProjectionTypeRegistry.process(headers, event)
   end
 end
