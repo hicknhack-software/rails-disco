@@ -69,7 +69,7 @@ Finally _projections_ are your representation of your data, they get the events 
 	
 		drails server
 
-9. Go to http://localhost:3000/posts and you'll see an empty list of our posts with a link to create a new one. Go ahead and create one. If you watch the console output, you can see that an event will be created for the creating of the post and will be published to the projection.
+9. Go to [http://localhost:3000/posts](http://localhost:3000/posts) and you'll see an empty list of our posts with a link to create a new one. Go ahead and create one. If you watch the console output, you can see that an event will be created for the creating of the post and will be published to the projection.
 
 10. If you look at your databases, you see in both of them a table `posts`, which contains your freshly created post. The domain database also contains a table `domain_events`. There you find an event for your post creation. Lets see this in action.
 
