@@ -60,7 +60,7 @@ module ActiveProjection
     attr_writer :projection_id
 
     def self.method_name_to_event_type(method_name)
-      (method_name.to_s.gsub('__', '/').camelcase + 'Event').to_sym
+      method_name.to_s.gsub('__', '/').camelcase.to_sym
     end
  
     def projection_id

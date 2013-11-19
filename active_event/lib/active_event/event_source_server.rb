@@ -18,7 +18,7 @@ module ActiveEvent
     end
 
     def event_exchange
-      @event_exchange ||= event_channel.fanout options[:event_exchange]
+      @event_exchange ||= event_channel.fanout "server_side_#{options[:event_exchange]}"
     end
 
     def default_options

@@ -48,7 +48,7 @@ module Drails
       end
 
       def copy_event_stream_client
-        copy_file '_eventstream.js.erb', File.join('app/views', class_path, plural_file_name, '_eventstream.js.erb')
+        copy_file '_eventstream.js.erb', File.join('app', 'views', 'application', '_eventstream.js.erb')
       end
 
       def add_event_stream_client_to_views
@@ -80,6 +80,7 @@ module Drails
             'delete' => "#{class_name}.find(event.id).destroy!",
         }
       end
+
       def add_line_with_indent(target, indent, str)
         target << "#{"  " * indent}#{str}\n"
       end

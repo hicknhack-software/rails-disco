@@ -21,6 +21,7 @@ module ActiveProjection
     def listen_for_events
       subscribe_to event_queue do |delivery_info, properties, body|
         event_received properties, body
+        send_browser_notification properties.headers[:id]
       end
     end
 
@@ -33,6 +34,10 @@ module ActiveProjection
       subscribe_to replay_queue do |delivery_info, properties, body|
         event_received properties, body unless replay_done? body
       end
+    end
+
+    def send_browser_notification(id)
+      server_side_events_exchange.publish id.to_s
     end
 
     def send_request_for(id)
@@ -51,7 +56,7 @@ module ActiveProjection
     def event_received(properties, body)
       RELOADER.execute_if_updated
       puts "Received #{properties.type} with #{body}"
-      ProjectionTypeRegistry.process properties.headers.deep_symbolize_keys, build_event(properties.type, JSON.parse(body))
+      ProjectionTypeRegistry.process properties.headers.deep_symbolize_keys!, build_event(properties.type, JSON.parse(body))
     end
 
     def build_event(type, data)
@@ -92,6 +97,10 @@ module ActiveProjection
 
     def resend_request_exchange
       @resend_request_exchange ||= event_channel.direct "resend_request_#{options[:event_exchange]}"
+    end
+
+    def server_side_events_exchange
+      @server_side_events_exchange ||= event_channel.fanout "server_side_#{options[:event_exchange]}"
     end
 
     def options
