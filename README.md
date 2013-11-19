@@ -30,6 +30,7 @@ Finally _projections_ are your representation of your data, they get the events 
 
 		gem install rails-disco
 
+
 3. At the command prompt, create a new Rails Disco application.
 
 		drails new myapp
@@ -59,8 +60,10 @@ Finally _projections_ are your representation of your data, they get the events 
 
 7. Before we can start, we need to tell rails that we have some shiny new db. Open up config/database.yml and edit the config for your environment (propably development) to the projection database. So basically:
 
-		- ~~database: db/development.sqlite3~~
-		+ database: db/projection_dev.sqlite3
+	```diff
+	- database: db/development.sqlite3
+	+ database: db/projection_dev.sqlite3
+	```
 
 8. Now that we have something to rely on, lets see it in action:
 	
