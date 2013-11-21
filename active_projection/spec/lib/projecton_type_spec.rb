@@ -15,10 +15,14 @@ describe ActiveProjection::ProjectionType do
       def test_event(event, headers)
       end
 
-      def dummy_event(event)
+      def admin__dummy_event(event)
       end
     end
     class TestEvent
+    end
+    module Admin
+      class DummyEvent
+      end
     end
     before :each do
       allow(ActiveProjection::ProjectionTypeRegistry).to receive(:register)
@@ -64,11 +68,20 @@ describe ActiveProjection::ProjectionType do
       end
     end
 
-    it 'invokes all handler' do
-      expect(ActiveProjection::ProjectionRepository).to receive(:set_last_id).with(1, 6)
-      expect(@projection).to receive(:test_event)
-      expect(@projection).to_not receive(:dummy)
-      @projection.invoke(TestEvent.new, {id: 6})
+    describe 'invokes correct handler' do
+      it 'without namespace' do
+        expect(ActiveProjection::ProjectionRepository).to receive(:set_last_id).with(1, 6)
+        expect(@projection).to receive(:test_event)
+        expect(@projection).to_not receive(:admin__dummy_event)
+        @projection.invoke(TestEvent.new, {id: 6})
+      end
+
+      it 'with namespace' do
+        expect(ActiveProjection::ProjectionRepository).to receive(:set_last_id).with(1, 6)
+        expect(@projection).to receive(:admin__dummy_event)
+        expect(@projection).to_not receive(:test_event)
+        @projection.invoke(Admin::DummyEvent.new, {id: 6})
+      end
     end
   end
 end
