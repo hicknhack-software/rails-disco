@@ -12,10 +12,10 @@ describe ActiveProjection::ProjectionType do
   end
   describe 'instance' do
     class TestProjection
-      def test(event, headers)
+      def test_event(event, headers)
       end
 
-      def dummy(event)
+      def dummy_event(event)
       end
     end
     class TestEvent
@@ -66,7 +66,7 @@ describe ActiveProjection::ProjectionType do
 
     it 'invokes all handler' do
       expect(ActiveProjection::ProjectionRepository).to receive(:set_last_id).with(1, 6)
-      expect(@projection).to receive(:test)
+      expect(@projection).to receive(:test_event)
       expect(@projection).to_not receive(:dummy)
       @projection.invoke(TestEvent.new, {id: 6})
     end
