@@ -7,3 +7,8 @@ rvm:
   - 2.0.0
   - rbx-19mode
   - jruby-19mode
+
+# blacklist
+branches:
+  except:
+    - logo
