@@ -11,11 +11,16 @@ module ActiveProjection
 
     def start
       event_connection.start
+      sync_projections
       listen_for_events
       request_missing_events
       event_channel.work_pool.join
     rescue Interrupt
       puts 'Catching Interrupt'
+    end
+
+    def sync_projections
+      ProjectionTypeRegistry.sync_projections
     end
 
     def listen_for_events

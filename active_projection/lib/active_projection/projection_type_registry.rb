@@ -20,6 +20,16 @@ module ActiveProjection
       end
     end
 
+    def self.sync_projections
+      instance.sync_projections
+    end
+
+    def sync_projections
+      projections.each do |projection|
+        ProjectionRepository.create_or_get(projection.class.name)
+      end
+    end
+
     private
 
     cattr_accessor :registry

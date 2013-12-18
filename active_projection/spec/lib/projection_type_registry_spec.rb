@@ -20,4 +20,9 @@ describe ActiveProjection::ProjectionTypeRegistry do
     expect_any_instance_of(TestProjection).to receive(:invoke).with(event, headers)
     ActiveProjection::ProjectionTypeRegistry.process(headers, event)
   end
+
+  it 'synchronizes the known projections with the db' do
+    expect(ActiveProjection::ProjectionRepository).to receive(:create_or_get).with('TestProjection')
+    ActiveProjection::ProjectionTypeRegistry.sync_projections
+  end
 end
