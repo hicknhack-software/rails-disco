@@ -4,6 +4,7 @@ require 'active_domain'
 require 'active_record'
 
 ROOT_DIR ||= ENV['ROOT_DIR']
+LOGGER = ActiveEvent::Support::MultiLogger.new 'Domain Server'
 
 ActiveEvent::Autoload.app_path = ROOT_DIR
 ActiveDomain::Autoload.app_path = ROOT_DIR

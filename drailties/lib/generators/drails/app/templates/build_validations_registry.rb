@@ -2,6 +2,7 @@ require 'active_event'
 require 'active_projection'
 ActiveEvent::Autoload.app_path = File.expand_path('../../..', __FILE__)
 ActiveProjection::Autoload.app_path = File.expand_path('../../..', __FILE__)
+LOGGER = ActiveEvent::Support::MultiLogger.new 'Rails Server'
 
 watchable_dirs = ActiveEvent::Autoload.watchable_dirs.merge ActiveProjection::Autoload.watchable_dirs
 RELOADER = ActiveSupport::FileUpdateChecker.new([], watchable_dirs) do

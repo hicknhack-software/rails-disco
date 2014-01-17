@@ -6,6 +6,7 @@ require 'active_record'
 ROOT_DIR ||= ENV['ROOT_DIR']
 WORKER_COUNT = [ENV['WORKER_COUNT'].to_i, 1].max
 WORKER_NUMBER = ENV['WORKER_NUMBER'].to_i
+LOGGER = ActiveEvent::Support::MultiLogger.new "Projection Server#{WORKER_COUNT > 1 ? " Nr. #{WORKER_NUMBER}" : ""}"
 
 ActiveEvent::Autoload.app_path = ROOT_DIR
 ActiveProjection::Autoload.app_path = ROOT_DIR

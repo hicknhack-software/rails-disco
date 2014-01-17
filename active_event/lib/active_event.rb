@@ -23,6 +23,7 @@ module ActiveEvent
     autoload :AttrSetter
     autoload :Autoload
     autoload :Autoloader
+    autoload :MultiLogger
   end
 
   autoload :Event, (File.expand_path '../../app/models/active_event/event', __FILE__)
