@@ -17,6 +17,10 @@ module ActiveProjection
       event_channel.work_pool.join
     rescue Interrupt
       LOGGER.info 'Catching Interrupt'
+    rescue Exception => e
+      LOGGER.error e.message
+      LOGGER.error e.backtrace.join("\n")
+      raise e
     end
 
     def sync_projections

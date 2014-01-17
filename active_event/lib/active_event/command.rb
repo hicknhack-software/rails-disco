@@ -25,7 +25,10 @@ module ActiveEvent
       else
         false
       end
-    rescue
+    rescue Exception => e
+      LOGGER.error "Validation failed for #{self.class.name}"
+      LOGGER.error e.message
+      LOGGER.error e.backtrace.join("\n")
       false
     end
   end

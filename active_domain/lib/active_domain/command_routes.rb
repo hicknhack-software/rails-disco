@@ -12,6 +12,10 @@ module ActiveDomain
       RELOADER.execute_if_updated
       processor, method = @@routes[command.class]
       processor_instance(processor).method(method).call(command)
+    rescue Exception => e
+      LOGGER.error e.message
+      LOGGER.error e.backtrace.join("\n")
+      raise e
     end
 
     def self.route(type, processor, method)

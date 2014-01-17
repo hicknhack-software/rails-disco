@@ -19,6 +19,10 @@ module ActiveEvent
     def start
       event_connection.start
       listen_for_resend_requests
+    rescue Exception => e
+      LOGGER.error e.message
+      LOGGER.error e.backtrace.join("\n")
+      raise e
     end
 
     def resend_events_after(id)
