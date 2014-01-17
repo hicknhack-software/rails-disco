@@ -19,7 +19,7 @@ module ActiveDomain
       DRb.start_service(drb_uri, domain, options.fetch(:drb_config, {}))
       DRb.thread.join
     rescue Interrupt
-      puts 'Catching Interrupt'
+      LOGGER.info 'Catching Interrupt'
     end
 
     def env

@@ -16,7 +16,7 @@ module ActiveProjection
       request_missing_events
       event_channel.work_pool.join
     rescue Interrupt
-      puts 'Catching Interrupt'
+      LOGGER.info 'Catching Interrupt'
     end
 
     def sync_projections
@@ -51,7 +51,7 @@ module ActiveProjection
 
     def replay_done?(body)
       if 'replay_done' == body
-        puts 'Projections should be up to date now'
+        LOGGER.debug 'Projections should be up to date now'
         replay_queue.unbind(resend_exchange)
         return true
       end
@@ -60,7 +60,7 @@ module ActiveProjection
 
     def event_received(properties, body)
       RELOADER.execute_if_updated
-      puts "Received #{properties.type} with #{body}"
+      LOGGER.debug "Received #{properties.type} with #{body}"
       ProjectionTypeRegistry.process properties.headers.deep_symbolize_keys!, build_event(properties.type, JSON.parse(body))
     end
 

@@ -27,11 +27,11 @@ module ActiveProjection
         when last_id + 1 == event_id
           true
         when last_id >= event_id
-          puts "[#{self.class.name}] event #{event_id} already processed"
+          LOGGER.debug "[#{self.class.name}] event #{event_id} already processed"
           false
         when last_id < event_id
           set_broken
-          puts "[#{self.class.name}] #{event_id - last_id} events are missing"
+          LOGGER.debug "[#{self.class.name}] #{event_id - last_id} events are missing"
           false
       end
     end
@@ -47,12 +47,12 @@ module ActiveProjection
             self.send method, event, headers
           end
         rescue Exception
-          puts "[#{self.class.name}] error processing #{event_type}[#{event_id}]"
+          LOGGER.debug "[#{self.class.name}] error processing #{event_type}[#{event_id}]"
           raise
         end
       end
       update_last_id event_id
-      puts "[#{self.class.name}] sucessfully processed #{event_type}[#{event_id}]"
+      LOGGER.debug "[#{self.class.name}] sucessfully processed #{event_type}[#{event_id}]"
     end
 
     private

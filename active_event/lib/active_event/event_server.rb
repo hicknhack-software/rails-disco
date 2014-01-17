@@ -8,7 +8,7 @@ module ActiveEvent
       type = event.class.name
       body = event.to_json
       instance.event_exchange.publish body, type: type, headers: event.store_infos
-      puts "Published #{type} with #{body}"
+      LOGGER.debug "Published #{type} with #{body}"
     end
 
     def self.start(options)
@@ -39,7 +39,7 @@ module ActiveEvent
     end
 
     def resend_request_received (id)
-      puts "received resend request with id #{id}"
+      LOGGER.debug "received resend request with id #{id}"
       resend_events_after id.to_i
     end
 

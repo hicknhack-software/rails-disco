@@ -60,7 +60,7 @@ module ActiveEvent
       type = event.event
       body = event.data.to_json
       resend_exchange.publish body, {type: type, headers: {id: event.id, created_at: event.created_at, replayed: true}}
-      puts "Republished #{type} with #{body}"
+      LOGGER.debug "Republished #{type} with #{body}"
     end
 
     def next_event
