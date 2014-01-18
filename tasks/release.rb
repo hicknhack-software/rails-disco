@@ -1,4 +1,4 @@
-FRAMEWORKS = %w( active_domain active_event active_projection drailties )
+FRAMEWORKS = %w( active_event active_domain active_projection drailties )
 
 root    = File.expand_path('../../', __FILE__)
 version = File.read("#{root}/RAILS-DISCO_VERSION").strip

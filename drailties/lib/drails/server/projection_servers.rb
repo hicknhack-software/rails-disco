@@ -1,9 +1,12 @@
 #!/usr/bin/env ruby.exe
+ROOT_DIR ||= ENV['ROOT_DIR']
+ENV['BUNDLE_GEMFILE'] ||= File.expand_path('Gemfile', ROOT_DIR)
+require 'bundler/setup' if File.exists?(ENV['BUNDLE_GEMFILE'])
+
 require 'active_event'
 require 'active_projection'
 require 'active_record'
 
-ROOT_DIR ||= ENV['ROOT_DIR']
 WORKER_COUNT = [ENV['WORKER_COUNT'].to_i, 1].max
 WORKER_NUMBER = ENV['WORKER_NUMBER'].to_i
 LOGGER = ActiveEvent::Support::MultiLogger.new "Projection Server#{WORKER_COUNT > 1 ? " Nr. #{WORKER_NUMBER}" : ""}"
