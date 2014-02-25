@@ -20,18 +20,21 @@ module ActiveProjection
     end
 
     def evaluate(headers)
-      return false unless solid? || headers[:replayed]
+      unless solid?
+        LOGGER.error "[#{self.class.name}] is broken"
+        return false
+      end
       last_id = fetch_last_id
       event_id = headers[:id]
       case
         when last_id + 1 == event_id
           true
         when last_id >= event_id
-          LOGGER.debug "[#{self.class.name}] event #{event_id} already processed"
+          LOGGER.debug "[#{self.class.name}]: event #{event_id} already processed"
           false
         when last_id < event_id
           set_broken
-          LOGGER.debug "[#{self.class.name}] #{event_id - last_id} events are missing"
+          LOGGER.error "[#{self.class.name}]: #{event_id - last_id} events are missing"
           false
       end
     end
@@ -46,13 +49,15 @@ module ActiveProjection
           else
             self.send method, event, headers
           end
-        rescue Exception
-          LOGGER.debug "[#{self.class.name}] error processing #{event_type}[#{event_id}]"
-          raise
+        rescue Exception => e
+          LOGGER.error "[#{self.class.name}]: error processing #{event_type}[#{event_id}]\n#{e.message}\n#{e.backtrace}"
+          set_broken
         end
       end
-      update_last_id event_id
-      LOGGER.debug "[#{self.class.name}] sucessfully processed #{event_type}[#{event_id}]"
+      if solid?
+        update_last_id event_id
+        LOGGER.debug "[#{self.class.name}]: sucessfully processed #{event_type}[#{event_id}]"
+      end
     end
 
     private
@@ -62,7 +67,7 @@ module ActiveProjection
     def self.method_name_to_event_type(method_name)
       method_name.to_s.gsub('__', '/').camelcase.to_sym
     end
- 
+
     def projection_id
       @projection_id ||= ProjectionRepository.create_or_get(self.class.name).id
     end

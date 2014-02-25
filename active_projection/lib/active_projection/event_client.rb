@@ -55,7 +55,9 @@ module ActiveProjection
 
     def replay_done?(body)
       if 'replay_done' == body
-        LOGGER.debug 'Projections should be up to date now'
+        LOGGER.debug 'All replayed events received'
+        broken_projections = ProjectionRepository.get_all_broken
+        LOGGER.error "These projections are still broken: #{broken_projections.join(", ")}" unless broken_projections.empty?
         replay_queue.unbind(resend_exchange)
         return true
       end

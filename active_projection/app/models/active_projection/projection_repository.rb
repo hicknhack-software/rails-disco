@@ -19,6 +19,14 @@ module ActiveProjection
       Projection.find(id).update! solid: false
     end
 
+    def self.get_all_broken
+      broken_projections = []
+      Projection.all.to_a.each do |p|
+        broken_projections << p.class_name unless p.solid?
+      end
+      broken_projections
+    end
+
     def self.solid?(id)
       @@broken[id] ||= Projection.find(id).solid
     end

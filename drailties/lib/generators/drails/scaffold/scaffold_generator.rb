@@ -48,11 +48,12 @@ module Drails
       end
 
       def copy_event_stream_client
-        copy_file '_eventstream.js.erb', File.join('app', 'views', 'application', '_eventstream.js.erb')
+        file = File.join('app', 'views', 'application', 'eventstream', '_eventstream.js.erb')
+        copy_file '_eventstream.js.erb', file unless file.exist?
       end
 
       def add_event_stream_client_to_views
-        include_text = '<%= javascript_tag render partial: \'eventstream\', formats: [:js], locals: {event_id: @event_id} %>'
+        include_text = '<%= javascript_tag render partial: \'eventstream/eventstream\', formats: [:js], locals: {event_id: @event_id} %>'
         prepend_to_file File.join('app/views', class_path, plural_file_name, 'index.html.erb'), include_text
         prepend_to_file File.join('app/views', class_path, plural_file_name, 'show.html.erb'), include_text
       end
