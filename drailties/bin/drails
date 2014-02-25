@@ -38,7 +38,7 @@ command = aliases[command] || command
 case command
   when 'new'
     require 'drails/application'
-  when 'generate','rake','server', 'domainserver', 'projectionserver'
+  when 'generate', 'server', 'domainserver', 'projectionserver'
     ROOT_DIR ||= Dir.pwd
     require "drails/#{command}"
   when '-h', '--help'

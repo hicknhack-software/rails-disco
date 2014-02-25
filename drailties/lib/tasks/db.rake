@@ -1,123 +1,221 @@
 require 'yaml'
-require 'logger'
 require 'active_record'
 
-namespace :drails do
+namespace :disco do
   namespace :db do
-    def create_database(config)
-      options = {:charset => 'utf8', :collation => 'utf8_unicode_ci'}
+    def disco_database_configuration(disco_config, database)
+      disco_config.reduce({}) do |map, (key, value)|
+        if value.is_a?(Hash) && value.has_key?(database)
+          map[key] = value[database]
+        end
+        map
+      end
+    end
 
-      create_db = lambda do |config|
-        ActiveRecord::Base.establish_connection config.merge('database' => nil)
-        ActiveRecord::Base.connection.create_database config['database'], options
-        ActiveRecord::Base.establish_connection config
+    task :load_config => :environment do
+      migrate_path = 'db/migrate'
+      ActiveRecord::Tasks::DatabaseTasks.db_dir = Rails.application.config.paths['db'].first
+      ActiveRecord::Tasks::DatabaseTasks.seed_loader = Rails.application
+      ActiveRecord::Base.clear_all_connections!
+
+      if ENV['SYSTEM'] == 'domain'
+        migrate_path = 'db/migrate_domain'
+        ActiveRecord::Tasks::DatabaseTasks.env = ENV['DOMAIN_ENV'] || Rails.env
+        disco_config = YAML.load_file(File.join Rails.root, 'config', 'disco.yml')
+        ActiveRecord::Tasks::DatabaseTasks.database_configuration = disco_database_configuration(disco_config, 'domain_database')
+        ActiveRecord::Tasks::DatabaseTasks.migrations_paths =
+            Array(ENV['DOMAIN_MIGRATIONS_DIR'] || Rails.application.paths[migrate_path] || File.join(Rails.root, migrate_path))
+        ActiveRecord::Tasks::DatabaseTasks.fixtures_path = File.join Rails.root, 'test', 'fixtures_domain'
+        ENV['SCHEMA'] = File.join(ActiveRecord::Tasks::DatabaseTasks.db_dir, 'schema_domain.rb')
+        ENV['DB_STRUCTURE'] || File.join(ActiveRecord::Tasks::DatabaseTasks.db_dir, 'structure_domain.sql')
+
+      else # 'projection' - normal rails
+        ActiveRecord::Tasks::DatabaseTasks.env = ENV['PROJECTION_ENV'] || Rails.env
+        ActiveRecord::Tasks::DatabaseTasks.database_configuration = Rails.application.config.database_configuration
+        ActiveRecord::Tasks::DatabaseTasks.migrations_paths = Array(Rails.application.paths[migrate_path])
+        ActiveRecord::Tasks::DatabaseTasks.fixtures_path = File.join Rails.root, 'test', 'fixtures'
+        ENV['SCHEMA'] = File.join(ActiveRecord::Tasks::DatabaseTasks.db_dir, 'schema.rb')
+        ENV['DB_STRUCTURE'] = File.join(ActiveRecord::Tasks::DatabaseTasks.db_dir, 'structure.sql')
       end
 
-      begin
-        create_db.call config
-      rescue Mysql::Error => sqlerr
-        if sqlerr.errno == 1405
-          print "#{sqlerr.error}. \nPlease provide the root password for your mysql installation\n>"
-          root_password = $stdin.gets.strip
-
-          grant_statement = <<-SQL
-          GRANT ALL PRIVILEGES ON #{config['database']}.*
-            TO '#{config['username']}'@'localhost'
-            IDENTIFIED BY '#{config['password']}' WITH GRANT OPTION;
-          SQL
-
-          create_db.call config.merge('database' => nil, 'username' => 'root', 'password' => root_password)
-        else
-          $stderr.puts sqlerr.error
-          $stderr.puts "Couldn't create database for #{config.inspect}, charset: utf8, collation: utf8_unicode_ci"
-          $stderr.puts "(if you set the charset manually, make sure you have a matching collation)" if config['charset']
+      if defined?(ENGINE_PATH) && (engine = Rails::Engine.find(ENGINE_PATH))
+        if engine.paths[migrate_path].existent
+          ActiveRecord::Tasks::DatabaseTasks.migrations_paths += Array(engine.paths[migrate_path])
+        elsif Dir.exists?(File.join engine.root, migrate_path)
+          ActiveRecord::Tasks::DatabaseTasks.migrations_paths << File.join(engine.root, migrate_path)
         end
       end
+      Rails.env = ActiveRecord::Tasks::DatabaseTasks.env
+
+      #puts "env = #{ActiveRecord::Tasks::DatabaseTasks.env}"
+      puts "system = #{ENV['SYSTEM']}"
+      #puts "config = #{ActiveRecord::Tasks::DatabaseTasks.database_configuration[ActiveRecord::Tasks::DatabaseTasks.env]}"
     end
 
-    task :db_env do
-      DATABASE_ENV = ENV['DATABASE_ENV'] || 'development'
+    def connect
+      ActiveRecord::Base.establish_connection ActiveRecord::Tasks::DatabaseTasks.env
     end
 
-    task :environment => :db_env do
-      if ENV['ENV'] == 'domain'
-        @migration_dir = ENV['MIGRATIONS_DIR'] || 'db/migrate_domain'
-        @env = 'domain'
-      else
-        @migration_dir = ENV['MIGRATIONS_DIR'] || 'db/migrate'
-        @env = 'projection'
+    namespace :migrate do
+      desc 'Copys the migrations files from the gems directories (options: SYSTEM=(projection|domain))'
+      task :copy => :load_config do
+        target_path = ActiveRecord::Tasks::DatabaseTasks.migrations_paths.first
+        gems = %w(active_event active_domain)
+        gems = %w(active_projection) if ENV['SYSTEM'] != 'domain'
+        gems.each do |gem|
+          gem_spec = Gem::Specification.find_by_name(gem)
+          if gem.nil?
+            puts "missing gem #{gem}!"
+          elsif Dir.exists?(File.join gem_spec.gem_dir, 'db/migrate')
+            cp_r (File.join gem_spec.gem_dir, 'db/migrate/.'), target_path
+          else
+            puts "missing db/migrate in gem #{gem}!"
+          end
+        end
       end
-    end
 
-    task :configuration => :environment do
-      @config = YAML.load_file("config/disco.yml")[DATABASE_ENV]["#{@env}_database"]
-    end
-
-    task :configure_connection => :configuration do
-      ActiveRecord::Base.establish_connection @config
-      ActiveRecord::Base.logger = Logger.new STDOUT if @config['logger']
-    end
-
-    desc 'Create the database from config/disco.yml for the current DATABASE_ENV (options: ENV=(projection|domain))'
-    task :create => :configure_connection do
-      create_database @config
-    end
-
-    desc 'Drops the database for the current DATABASE_ENV (options: ENV=(projection|domain))'
-    task :drop => :configure_connection do
-      ActiveRecord::Base.connection.drop_database @config['database']
-    end
-
-    desc 'Rolls the schema back to the previous version (specify steps w/ STEP=n) (options: ENV=(projection|domain)).'
-    task :rollback => :configure_connection do
-      step = ENV['STEP'] ? ENV['STEP'].to_i : 1
-      ActiveRecord::Migrator.rollback @migration_dir, step
-    end
-
-    desc 'Retrieves the current schema version number'
-    task :version => :configure_connection do
-      puts "Current version: #{ActiveRecord::Migrator.current_version}"
-    end
-
-    desc 'Copys the migrations files from the gems directories (options: ENV=(projection|domain))'
-    task :copy_migrations => :environment do
-      if @env == 'domain'
-        cp_r Gem::Specification.find_by_name('active_event').gem_dir + '/db/migrate/.', @migration_dir
-        cp_r Gem::Specification.find_by_name('active_domain').gem_dir + '/db/migrate/.', @migration_dir
-      else
-        cp_r Gem::Specification.find_by_name('active_projection').gem_dir + '/db/migrate/.', @migration_dir
+      desc 'Copy and run migrations (options: SYSTEM=(projection|domain))'
+      task :setup do
+        Rake::Task[:'drails:db:migrate:copy'].invoke
+        Rake::Task[:'drails:db:create'].invoke
+        Rake::Task[:'drails:db:migrate'].invoke
       end
+
+      # make sure the right database is connected
+      task :down do connect end
+      task :up do connect end
+      task :status do connect end
     end
 
-    desc 'Migrates the database (options: VERSION=x, ENV=(projection|domain))'
-    task :migrate => :configure_connection do
-      ActiveRecord::Migration.verbose = true
-      ActiveRecord::Migrator.migrate @migration_dir, ENV['VERSION'] ? ENV['VERSION'].to_i : nil
+    task :migrate do connect end
+
+    namespace :schema do
+      task :load do connect end
+    end
+    namespace :structure do
+      task :load do connect end
+    end
+  end
+
+  load 'active_record/railties/databases.rake'
+
+  namespace :domain do
+    task :environment do
+      ENV['SYSTEM'] = 'domain'
     end
 
-    desc 'Copys the domain migrations and migrates the domain database'
-    task :setup_domain do
-      ENV['ENV'] = 'domain'
-      Rake::Task[:'drails:db:copy_migrations'].invoke
-      Rake::Task[:'drails:db:migrate'].invoke
+    namespace :create do
+      task :all => [:environment, :'drails:db:create:all']
     end
 
-    desc 'Copys the projection migrations and migrates the projection database'
-    task :setup_projection do
-      ENV['ENV'] = 'projection'
-      Rake::Task[:'drails:db:copy_migrations'].invoke
-      Rake::Task[:'drails:db:migrate'].invoke
+    desc 'Create the database from config/disco.yml (use create:all to create all dbs in the config)'
+    task :create => [:environment, :'drails:db:create']
+
+    namespace :drop do
+      task :all => [:environment, :'drails:db:drop:all']
     end
 
-    desc 'Copys the gem migrations and migrates the domain and the projection database after'
+    desc 'Drops the database using config/disco.yml (use drop:all to drop all databases)'
+    task :drop => [:environment, :'drails:db:drop']
+
+    desc 'run domain migrations'
+    task :migrate => [:environment, :'drails:db:migrate']
+
+    namespace :migrate do
+      desc 'Display status of migrations'
+      task :status => [:environment, :'drails:db:migrate:status']
+
+      desc 'Copy migrations from rails disco'
+      task :copy => [:environment, :'drails:db:migrate:copy']
+
+      desc 'Copy and run migrations from rails disco'
+      task :setup => [:environment, :'drails:db:migrate:setup']
+
+      desc 'drop and create, copy and run migrations from rails disco'
+      task :reset => [:environment, :'drails:db:migrate:reset']
+    end
+
+    desc 'create and load schema and seeds for domain database'
+    task :setup => [:environment, :'drails:db:setup']
+  end
+
+  def reenable
+    Rake::Task.tasks.map &:reenable
+  end
+
+  desc 'creates the domain and projection databases for the current environment'
+  task :create do
+    ENV['SYSTEM'] = 'projection'
+    Rake::Task[:'drails:db:create'].invoke
+
+    reenable
+    Rake::Task[:'drails:domain:create'].invoke
+  end
+
+  desc 'drops the domain and projection databases for the current environment'
+  task :drop do
+    ENV['SYSTEM'] = 'projection'
+    Rake::Task[:'drails:db:drop'].invoke
+
+    reenable
+    Rake::Task[:'drails:domain:drop'].invoke
+  end
+
+  desc 'migrates the domain and projection databases for the current environment'
+  task :migrate do
+    ENV['SYSTEM'] = 'projection'
+    Rake::Task[:'drails:db:migrate'].invoke
+
+    reenable
+    Rake::Task[:'drails:domain:migrate'].invoke
+  end
+
+  desc 'Create and load schema and seeds for domain and projection databases'
+  task :setup do
+    ENV['SYSTEM'] = 'projection'
+    Rake::Task[:'drails:db:setup'].invoke
+
+    reenable
+    Rake::Task[:'drails:domain:setup'].invoke
+  end
+
+  desc 'Drop, recreate and load schema and seeds for domain and projection databases'
+  task :reset do
+    ENV['SYSTEM'] = 'projection'
+    Rake::Task[:'drails:db:drop'].invoke
+    Rake::Task[:'drails:db:setup'].invoke
+
+    reenable
+    Rake::Task[:'drails:domain:drop'].invoke
+    Rake::Task[:'drails:domain:setup'].invoke
+  end
+
+  namespace :migrate do
+    desc 'copies, creates and runs all migrations for domain and projection databases for the current environment'
     task :setup do
-      Rake::Task[:'drails:db:setup_domain'].invoke
-      Rake::Task[:'drails:db:environment'].reenable
-      Rake::Task[:'drails:db:configure_connection'].reenable
-      Rake::Task[:'drails:db:configuration'].reenable
-      Rake::Task[:'drails:db:migrate'].reenable
-      Rake::Task[:'drails:db:copy_migrations'].reenable
-      Rake::Task[:'drails:db:setup_projection'].invoke
+      ENV['SYSTEM'] = 'projection'
+      Rake::Task[:'drails:db:migrate:setup'].invoke
+
+      reenable
+      Rake::Task[:'drails:domain:migrate:setup'].invoke
+    end
+
+    desc 'Resets your domain and projection databases using your migrations for the current environment'
+    task :reset do
+      ENV['SYSTEM'] = 'projection'
+      Rake::Task[:'drails:db:migrate:reset'].invoke
+
+      reenable
+      Rake::Task[:'drails:domain:migrate:reset'].invoke
+    end
+
+    desc 'Display status of domain and projection migrations'
+    task :status do
+      ENV['SYSTEM'] = 'projection'
+      Rake::Task[:'drails:db:migrate:status'].invoke
+
+      reenable
+      Rake::Task[:'drails:domain:migrate:status'].invoke
     end
   end
 end
