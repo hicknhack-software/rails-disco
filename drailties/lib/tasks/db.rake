@@ -76,9 +76,9 @@ namespace :disco do
 
       desc 'Copy and run migrations (options: SYSTEM=(projection|domain))'
       task :setup do
-        Rake::Task[:'drails:db:migrate:copy'].invoke
-        Rake::Task[:'drails:db:create'].invoke
-        Rake::Task[:'drails:db:migrate'].invoke
+        Rake::Task[:'disco:db:migrate:copy'].invoke
+        Rake::Task[:'disco:db:create'].invoke
+        Rake::Task[:'disco:db:migrate'].invoke
       end
 
       # make sure the right database is connected
@@ -105,38 +105,38 @@ namespace :disco do
     end
 
     namespace :create do
-      task :all => [:environment, :'drails:db:create:all']
+      task :all => [:environment, :'disco:db:create:all']
     end
 
     desc 'Create the database from config/disco.yml (use create:all to create all dbs in the config)'
-    task :create => [:environment, :'drails:db:create']
+    task :create => [:environment, :'disco:db:create']
 
     namespace :drop do
-      task :all => [:environment, :'drails:db:drop:all']
+      task :all => [:environment, :'disco:db:drop:all']
     end
 
     desc 'Drops the database using config/disco.yml (use drop:all to drop all databases)'
-    task :drop => [:environment, :'drails:db:drop']
+    task :drop => [:environment, :'disco:db:drop']
 
     desc 'run domain migrations'
-    task :migrate => [:environment, :'drails:db:migrate']
+    task :migrate => [:environment, :'disco:db:migrate']
 
     namespace :migrate do
       desc 'Display status of migrations'
-      task :status => [:environment, :'drails:db:migrate:status']
+      task :status => [:environment, :'disco:db:migrate:status']
 
       desc 'Copy migrations from rails disco'
-      task :copy => [:environment, :'drails:db:migrate:copy']
+      task :copy => [:environment, :'disco:db:migrate:copy']
 
       desc 'Copy and run migrations from rails disco'
-      task :setup => [:environment, :'drails:db:migrate:setup']
+      task :setup => [:environment, :'disco:db:migrate:setup']
 
       desc 'drop and create, copy and run migrations from rails disco'
-      task :reset => [:environment, :'drails:db:migrate:reset']
+      task :reset => [:environment, :'disco:db:migrate:reset']
     end
 
     desc 'create and load schema and seeds for domain database'
-    task :setup => [:environment, :'drails:db:setup']
+    task :setup => [:environment, :'disco:db:setup']
   end
 
   def reenable
@@ -146,76 +146,76 @@ namespace :disco do
   desc 'creates the domain and projection databases for the current environment'
   task :create do
     ENV['SYSTEM'] = 'projection'
-    Rake::Task[:'drails:db:create'].invoke
+    Rake::Task[:'disco:db:create'].invoke
 
     reenable
-    Rake::Task[:'drails:domain:create'].invoke
+    Rake::Task[:'disco:domain:create'].invoke
   end
 
   desc 'drops the domain and projection databases for the current environment'
   task :drop do
     ENV['SYSTEM'] = 'projection'
-    Rake::Task[:'drails:db:drop'].invoke
+    Rake::Task[:'disco:db:drop'].invoke
 
     reenable
-    Rake::Task[:'drails:domain:drop'].invoke
+    Rake::Task[:'disco:domain:drop'].invoke
   end
 
   desc 'migrates the domain and projection databases for the current environment'
   task :migrate do
     ENV['SYSTEM'] = 'projection'
-    Rake::Task[:'drails:db:migrate'].invoke
+    Rake::Task[:'disco:db:migrate'].invoke
 
     reenable
-    Rake::Task[:'drails:domain:migrate'].invoke
+    Rake::Task[:'disco:domain:migrate'].invoke
   end
 
   desc 'Create and load schema and seeds for domain and projection databases'
   task :setup do
     ENV['SYSTEM'] = 'projection'
-    Rake::Task[:'drails:db:setup'].invoke
+    Rake::Task[:'disco:db:setup'].invoke
 
     reenable
-    Rake::Task[:'drails:domain:setup'].invoke
+    Rake::Task[:'disco:domain:setup'].invoke
   end
 
   desc 'Drop, recreate and load schema and seeds for domain and projection databases'
   task :reset do
     ENV['SYSTEM'] = 'projection'
-    Rake::Task[:'drails:db:drop'].invoke
-    Rake::Task[:'drails:db:setup'].invoke
+    Rake::Task[:'disco:db:drop'].invoke
+    Rake::Task[:'disco:db:setup'].invoke
 
     reenable
-    Rake::Task[:'drails:domain:drop'].invoke
-    Rake::Task[:'drails:domain:setup'].invoke
+    Rake::Task[:'disco:domain:drop'].invoke
+    Rake::Task[:'disco:domain:setup'].invoke
   end
 
   namespace :migrate do
     desc 'copies, creates and runs all migrations for domain and projection databases for the current environment'
     task :setup do
       ENV['SYSTEM'] = 'projection'
-      Rake::Task[:'drails:db:migrate:setup'].invoke
+      Rake::Task[:'disco:db:migrate:setup'].invoke
 
       reenable
-      Rake::Task[:'drails:domain:migrate:setup'].invoke
+      Rake::Task[:'disco:domain:migrate:setup'].invoke
     end
 
     desc 'Resets your domain and projection databases using your migrations for the current environment'
     task :reset do
       ENV['SYSTEM'] = 'projection'
-      Rake::Task[:'drails:db:migrate:reset'].invoke
+      Rake::Task[:'disco:db:migrate:reset'].invoke
 
       reenable
-      Rake::Task[:'drails:domain:migrate:reset'].invoke
+      Rake::Task[:'disco:domain:migrate:reset'].invoke
     end
 
     desc 'Display status of domain and projection migrations'
     task :status do
       ENV['SYSTEM'] = 'projection'
-      Rake::Task[:'drails:db:migrate:status'].invoke
+      Rake::Task[:'disco:db:migrate:status'].invoke
 
       reenable
-      Rake::Task[:'drails:domain:migrate:status'].invoke
+      Rake::Task[:'disco:domain:migrate:status'].invoke
     end
   end
 end
