@@ -1,12 +1,7 @@
 development:
   domain_database:
     adapter: sqlite3
-    database: db/domain_dev.sqlite3
-    pool: 5
-    timeout: 5000
-  projection_database:
-    adapter: sqlite3
-    database: db/projection_dev.sqlite3
+    database: db/development_domain.sqlite3
     pool: 5
     timeout: 5000
   drb_server:
@@ -22,24 +17,14 @@ development:
 test:
   domain_database:
     adapter: sqlite3
-    database: db/domain_test.sqlite3
-    pool: 5
-    timeout: 5000
-  projection_database:
-    adapter: sqlite3
-    database: db/projection_test.sqlite3
+    database: db/test_domain.sqlite3
     pool: 5
     timeout: 5000
 
 production:
   domain_database:
     adapter: sqlite3
-    database: db/domain.sqlite3
-    pool: 5
-    timeout: 5000
-  projection_database:
-    adapter: sqlite3
-    database: db/projection.sqlite3
+    database: db/production_domain.sqlite3
     pool: 5
     timeout: 5000
   drb_server:
