@@ -60,7 +60,7 @@ module Drails
       end
 
       def add_to_projections(action)
-        event_func = (class_path + ["#{file_name}_#{action}d_event"]) * '__'
+        event_func = (class_path + ["#{action}d_#{file_name}_event"]) * '__'
         content = "
 
   def #{event_func}(event)
