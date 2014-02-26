@@ -5,7 +5,6 @@ module Drails
   module Generators
     class MigrationGenerator < ActiveRecord::Generators::MigrationGenerator
       source_root File.expand_path('../templates', __FILE__)
-      hide!
       include UseDomainOption
 
       def create_migration_file

@@ -9,30 +9,23 @@ module Drails
       include ProcessorName
       include Domain
 
-      def create_models
-        generate 'drails:model', name, attr_string
-      end
+      hook_for :model, in: :drails, require: true
 
-      def create_commands
+      hook_for :command, in: :drails, require: true do |hook|
         %w(create update delete).each do |action|
-          attr_arg = attributes_names.join(' ') unless action == 'delete'
-          command = (class_path + ["#{action}_#{file_name}"]) * '/'
-          event_arg = "--event=" + (class_path + ["#{action}d_#{file_name}"]) * '/'
-          processor_arg = "--processor=#{processor_name}"
-          processor_arg = "--skip-processor" if skip_processor?
-          generate 'drails:command', command, attr_arg, processor_arg, event_arg
+          args = [(class_path + ["#{action}_#{file_name}"]) * '/']
+          args += attributes_names unless action == 'delete'
+          opts = ["--event=#{(class_path + ["#{action}d_#{file_name}"]) * '/'}"]
+          opts << "--processor=#{processor_name}" unless skip_processor?
+          opts << '--skip_model' if action == 'delete'
+          invoke hook, args, opts
           add_to_projections(action)
         end
-      end
-
-      def add_to_command_processor
-        content = "
-      command.id = ActiveDomain::UniqueCommandIdRepository.new_for command.class.name"
-        inject_into_file File.join('domain/command_processors', domain_class_path, "#{processor_file_name}_processor.rb"), content, after: /(\s)*process(\s)*(.)*CreateCommand(.)*/
+        add_to_command_processor
       end
 
       def add_routes
-        routing_code = ""
+        routing_code = ''
         class_path.each_with_index do |ns, i|
           add_line_with_indent routing_code, (i + 1), "namespace :#{ns} do"
         end
@@ -43,14 +36,17 @@ module Drails
         route routing_code[2..-1]
       end
 
-      def create_controller
-        generate 'drails:controller', name, attr_string
+      hook_for :scaffold_controller, in: :drails, require: true do |hook|
+        invoke hook
+        add_event_stream_client_to_views
       end
 
       def copy_event_stream_client
-        file = File.join('app', 'views', 'application', 'eventstream', '_eventstream.js.erb')
-        copy_file '_eventstream.js.erb', file unless file.exist?
+        # ensure if app was created before this was default
+        copy_file '_eventstream.js.erb', 'app/views/application/eventstream/_eventstream.js.erb', verbose: false, skip: true
       end
+
+      protected
 
       def add_event_stream_client_to_views
         include_text = '<%= javascript_tag render partial: \'eventstream/eventstream\', formats: [:js], locals: {event_id: @event_id} %>'
@@ -58,19 +54,19 @@ module Drails
         prepend_to_file File.join('app/views', class_path, plural_file_name, 'show.html.erb'), include_text
       end
 
-      private
-
-      def attr_string
-        @attr_string ||= attributes.map { |x| "#{x.name}:#{x.type}" }.join(' ')
+      def add_to_command_processor
+        content = "\n       command.id = ActiveDomain::UniqueCommandIdRepository.new_for command.class.name"
+        insert_into_file File.join('domain/command_processors', domain_class_path, "#{processor_file_name}_processor.rb"), content, after: /(\s)*process(\s)*(.)*CreateCommand(.)*/
       end
 
       def add_to_projections(action)
-        event_func = (class_path + ["#{action}d_#{file_name}_event"]) * '__'
+        event_func = (class_path + ["#{file_name}_#{action}d_event"]) * '__'
         content = "
 
-    def #{event_func}(event)
-      #{method_bodies[action]}
-    end"
+  def #{event_func}(event)
+    #{method_bodies[action]}
+  end"
+        indent(content) if namespaced?
         inject_into_file File.join('app/projections', class_path, "#{plural_file_name}_projection.rb"), content, after: /(\s)*include(\s)*ActiveProjection::ProjectionType/
       end
 

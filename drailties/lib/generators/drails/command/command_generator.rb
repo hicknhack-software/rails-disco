@@ -6,7 +6,8 @@ module Drails
   module Generators
     class CommandGenerator < Rails::Generators::NamedBase
       source_root File.expand_path('../templates', __FILE__)
-      argument :attributes, type: :array, default: [], banner: "attribute attribute"
+      argument :attributes, type: :array, default: [], banner: 'attribute attribute'
+      class_option :skip_model, type: :boolean, default: false, desc: 'Skip command as form model'
       include ProcessorName
       include EventName
       include Domain
@@ -20,10 +21,14 @@ module Drails
         template 'event.rb', File.join('app/events', event_class_path, "#{event_file_name}_event.rb")
       end
 
-      def create_command_processor
-        return if skip_processor?
-        generate 'drails:command_processor', processor_file_path, '-s', '--skip-namespace'
+      hook_for :command_processor, require: true do |hook|
+        unless skip_processor?
+          invoke hook, [processor_file_path], ['-s', '--skip-namespace']
+          add_to_command_processor
+        end
       end
+
+      private
 
       def add_to_command_processor
         return if skip_processor?
@@ -34,6 +39,19 @@ module Drails
     end"
         file = File.join('domain/command_processors', processor_domain_class_path, "#{processor_file_name}_processor.rb")
         inject_into_file file, content, after: /(\s)*include(\s)*ActiveDomain::CommandProcessor/
+      end
+
+      protected
+
+      def skip_model?
+        options[:skip_model]
+      end
+
+      private
+
+      # allow this generator to be called multiple times
+      def invoke_command(command, *args) #:nodoc:
+        command.run(self, *args)
       end
     end
   end

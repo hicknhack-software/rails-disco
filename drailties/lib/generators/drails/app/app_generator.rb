@@ -1,31 +1,72 @@
+require 'rails/generators/rails/app/app_generator'
+
 module Drails
+  class AppBuilder < Rails::AppBuilder
+
+    def gemfile
+      super
+      append_file 'Gemfile', "\n# Rails Disco support
+gem 'rails-disco', '~> #{RailsDisco::VERSION::STRING}'\n
+# Required Multithreaded Webserver
+gem 'puma'\n"
+    end
+
+    def app
+      super
+      copy_file 'app/controllers/event_source_controller.rb'
+      keep_file 'app/commands'
+      keep_file 'app/events'
+      keep_file 'app/projections'
+      keep_file 'app/validations'
+
+      keep_file 'domain/command_processors/domain'
+      keep_file 'domain/models/domain'
+      keep_file 'domain/projections/domain'
+      keep_file 'domain/validations/domain'
+    end
+
+    def bin
+      super
+      copy_file 'bin/drails'
+      chmod 'bin/drails', 0755, verbose: false
+    end
+
+    def config
+      super
+      inside 'config' do
+        copy_file 'disco.yml'
+        inside 'initializers' do
+          template 'create_domain.rb'
+          copy_file 'build_validations_registry.rb'
+        end
+      end
+    end
+
+    def db
+      super
+      append_file 'db/seeds.rb', File.binread(File.expand_path('../templates/db/seeds.rb', __FILE__))
+    end
+  end
+
   module Generators
-    class AppGenerator < Rails::Generators::NamedBase
-      source_root File.expand_path('../templates', __FILE__)
-      argument :name, type: :string, default: '', banner: "[name]"
+    class AppGenerator < Rails::Generators::AppGenerator
+      remove_class_option :version
+      class_option :version, type: :boolean, aliases: '-v', group: :drails,
+                   desc: 'Show Rails Disco version number and quit'
 
-      def copy_config
-        copy_file 'disco.yml', File.join('config', 'disco.yml')
+      remove_class_option :help
+      class_option :help, type: :boolean, aliases: '-h', group: :drails,
+                   desc: 'Show this help message and quit'
+
+      # this does not seem to work !
+      remove_command :apply_rails_template, :run_bundle
+
+      def source_paths
+        [File.join(Gem::Specification.find_by_name('railties').gem_dir, 'lib/rails/generators/rails/app/templates'), File.expand_path('../templates', __FILE__)]
       end
 
-      def create_domain_initializer
-        template 'create_domain.rb', File.join('config', 'initializers', 'create_domain.rb')
-      end
-
-      def copy_validation_registry_initializer
-        copy_file 'build_validations_registry.rb', File.join('config', 'initializers', 'build_validations_registry.rb')
-      end
-
-      def copy_sse_controller
-        copy_file 'event_source_controller.rb', File.join('app', 'controllers', 'event_source_controller.rb')
-      end
-
-      def add_sse_route
+      def add_event_source_route
         route "get 'event_stream' => 'event_source#stream'"
-      end
-
-      def add_drails_to_gemfile
-        gem "rails-disco"
       end
 
       def enable_rake_tasks
@@ -47,6 +88,36 @@ require 'rails-disco/tasks'"
         config.allow_concurrency = true\n
         in your application.rb from the main application"
       end
+
+      public_task :apply_rails_template, :run_bundle
+
+      private
+
+      def get_builder_class
+        defined?(::AppBuilder) ? ::AppBuilder : Drails::AppBuilder
+      end
+
+      # copied namespace support from NamedBase
+      def module_namespacing(&block)
+        content = capture(&block)
+        content = wrap_with_namespace(content) if namespace
+        concat(content)
+      end
+
+      def indent(content, multiplier = 2)
+        spaces = ' ' * multiplier
+        content.each_line.map {|line| line.blank? ? line : "#{spaces}#{line}" }.join
+      end
+
+      def wrap_with_namespace(content)
+        content = indent(content).chomp
+        "module #{namespace.name}\n#{content}\nend\n"
+      end
+
+      def namespace
+        Rails::Generators.namespace
+      end
+
     end
   end
 end
