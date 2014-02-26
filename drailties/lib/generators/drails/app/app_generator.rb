@@ -1,4 +1,5 @@
 require 'rails/generators/rails/app/app_generator'
+require 'yaml'
 
 module Drails
   class AppBuilder < Rails::AppBuilder
@@ -33,13 +34,15 @@ gem 'puma'\n"
 
     def config
       super
-      inside 'config' do
-        copy_file 'disco.yml'
-        inside 'initializers' do
-          template 'create_domain.rb'
-          copy_file 'build_validations_registry.rb'
-        end
+      inside 'config/initializers' do
+        template 'create_domain.rb'
+        copy_file 'build_validations_registry.rb'
       end
+    end
+
+    def database_yml
+      super
+      template 'config/disco.yml'
     end
 
     def db
@@ -97,6 +100,12 @@ require 'rails-disco/tasks'"
         defined?(::AppBuilder) ? ::AppBuilder : Drails::AppBuilder
       end
 
+      def domain_database(env, indent_level)
+        config = YAML.load(File.read('config/database.yml'))[env.to_s]
+        config['database'].sub!(/.*#{env}/, '\0_domain')
+        indent( ({'domain_database' => config}.to_yaml(indentation: 2))[4..-1], indent_level)
+      end
+
       # copied namespace support from NamedBase
       def module_namespacing(&block)
         content = capture(&block)
@@ -117,7 +126,6 @@ require 'rails-disco/tasks'"
       def namespace
         Rails::Generators.namespace
       end
-
     end
   end
 end
