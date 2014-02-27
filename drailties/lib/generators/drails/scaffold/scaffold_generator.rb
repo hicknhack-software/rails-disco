@@ -18,6 +18,8 @@ module Drails
           opts = ["--event=#{(class_path + ["#{action}d_#{file_name}"]) * '/'}"]
           opts << "--processor=#{processor_name}" unless skip_processor?
           opts << '--skip_model' if action == 'delete'
+          opts << "--model_name=#{class_name}"
+          opts << '--persisted' if action == 'update'
           invoke hook, args, opts
           add_to_projections(action)
         end
@@ -31,7 +33,7 @@ module Drails
         end
         add_line_with_indent routing_code, (class_path.length + 1), "resources :#{plural_name}"
         class_path.each_with_index do |ns, i|
-          add_line_with_indent routing_code, (class_path.length - i), "end"
+          add_line_with_indent routing_code, (class_path.length - i), 'end'
         end
         route routing_code[2..-1]
       end
@@ -49,17 +51,20 @@ module Drails
       protected
 
       def add_event_stream_client_to_views
-        include_text = '<%= javascript_tag render partial: \'eventstream/eventstream\', formats: [:js], locals: {event_id: @event_id} %>'
+        return if behavior == :revoke
+        include_text = '<%= javascript_tag render partial: \'application/eventstream/eventstream\', formats: [:js], locals: {event_id: @event_id} %>'
         prepend_to_file File.join('app/views', class_path, plural_file_name, 'index.html.erb'), include_text
         prepend_to_file File.join('app/views', class_path, plural_file_name, 'show.html.erb'), include_text
       end
 
       def add_to_command_processor
+        return if behavior == :revoke
         content = "\n       command.id = ActiveDomain::UniqueCommandIdRepository.new_for command.class.name"
         insert_into_file File.join('domain/command_processors', domain_class_path, "#{processor_file_name}_processor.rb"), content, after: /(\s)*process(\s)*(.)*CreateCommand(.)*/
       end
 
       def add_to_projections(action)
+        return if behavior == :revoke
         event_func = (class_path + ["#{action}d_#{file_name}_event"]) * '__'
         content = "
 

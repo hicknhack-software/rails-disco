@@ -15,15 +15,15 @@ class <%= controller_class_name %>Controller < ApplicationController
   end
 
   def new
-    @<%= singular_table_name %> = <%= command_class_name('create') %>Command.new(<%= singular_table_name %>_params)
+    @<%= singular_table_name %> = <%= command_class_name('create') %>Command.new
   end
 
   def edit
-    @<%= singular_table_name %> = <%= command_class_name('update') %>Command.new(<%= orm_class.find(class_name, 'params[:id]') %>.attributes.merge(<%= singular_table_name %>_params))
+    @<%= singular_table_name %> = <%= command_class_name('update') %>Command.new <%= orm_class.find(class_name, 'params[:id]') %>.attributes
   end
 
   def create
-    @<%= singular_table_name %> = <%= command_class_name('create') %>Command.new(<%= singular_table_name %>_params)
+    @<%= singular_table_name %> = <%= command_class_name('create') %>Command.new <%= singular_table_name %>_params
     if @<%= singular_table_name %>.valid? && (session[:tmp_event_id] = Domain.run_command(@<%= singular_table_name %>))
       redirect_to @<%= singular_table_name %>, notice: <%= "'#{human_name} was successfully created.'" %>
     else
@@ -32,7 +32,7 @@ class <%= controller_class_name %>Controller < ApplicationController
   end
 
   def update
-    @<%= singular_table_name %> = <%= command_class_name('update') %>Command.new(<%= singular_table_name %>_params.merge(id: params[:id]))
+    @<%= singular_table_name %> = <%= command_class_name('update') %>Command.new <%= singular_table_name %>_params.merge(id: params[:id])
     if @<%= singular_table_name %>.valid? && (session[:tmp_event_id] = Domain.run_command(@<%= singular_table_name %>))
       redirect_to @<%= singular_table_name %>, notice: <%= "'#{human_name} was successfully updated.'" %>
     else

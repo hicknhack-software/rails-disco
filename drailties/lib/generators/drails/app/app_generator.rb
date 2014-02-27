@@ -9,7 +9,7 @@ module Drails
       append_file 'Gemfile', "\n# Rails Disco support
 gem 'rails-disco', '~> #{RailsDisco::VERSION::STRING}'\n
 # Required Multithreaded Webserver
-gem 'puma'\n"
+gem 'puma'\n" unless behavior == :revoke
     end
 
     def app
@@ -47,7 +47,7 @@ gem 'puma'\n"
 
     def db
       super
-      append_file 'db/seeds.rb', File.binread(File.expand_path('../templates/db/seeds.rb', __FILE__))
+      append_file 'db/seeds.rb', File.binread(File.expand_path('../templates/db/seeds.rb', __FILE__)) unless behavior == :revoke
     end
   end
 
@@ -69,10 +69,12 @@ gem 'puma'\n"
       end
 
       def add_event_source_route
+        return if behavior == :revoke
         route "get 'event_stream' => 'event_source#stream'"
       end
 
       def enable_rake_tasks
+        return if behavior == :revoke
         content = "
 require 'rails-disco/tasks'"
         inject_into_file File.join('config/application.rb'), content, after: /require 'rails\/all'/
@@ -83,6 +85,7 @@ require 'rails-disco/tasks'"
       end
 
       def enable_concurrency
+        return if behavior == :revoke
         application 'config.preload_frameworks = true'
         application 'config.allow_concurrency = true'
       rescue Exception
