@@ -46,6 +46,7 @@ namespace :disco do
         end
       end
       Rails.env = ActiveRecord::Tasks::DatabaseTasks.env
+      ActiveRecord::Tasks::DatabaseTasks.root = Rails.root if ActiveRecord::Tasks::DatabaseTasks.respond_to? :root
 
       #puts "env = #{ActiveRecord::Tasks::DatabaseTasks.env}"
       puts "system = #{ENV['SYSTEM']}"
