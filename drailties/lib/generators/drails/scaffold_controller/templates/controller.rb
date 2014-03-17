@@ -46,7 +46,7 @@ class <%= controller_class_name %>Controller < ApplicationController
     if event_id
       redirect_to <%= index_helper %>_url, notice: <%= "'#{human_name} was successfully destroyed.'" %>
     else
-      redirect_to <%= singular_table_name %>_url(id: params[:id]), error: <%= "'#{human_name} could not be deleted.'" %>
+      redirect_to <%= singular_table_name %>_url(id: params[:id]), alert: <%= "'#{human_name} could not be deleted.'" %>
     end
   end
 
