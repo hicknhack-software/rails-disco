@@ -1,7 +1,0 @@
-#!/usr/bin/env ruby
-
-unless Gem::Specification.find_by_name('drailties').gem_dir == File.expand_path('../..', __FILE__)
-  $:.push File.expand_path('../../lib', __FILE__)
-  $:.delete "#{Gem::Specification.find_by_name('drailties').gem_dir}/lib"
-end
-require 'drails/cli'

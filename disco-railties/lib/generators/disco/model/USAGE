@@ -1,0 +1,17 @@
+Description:
+    Generates a Model and a Projection for it.
+
+Example:
+    disco generate model Thing [attr1:type, attr2:type]
+
+    This will create:
+        app/projection/thing_projection.rb
+        app/models/thing.rb
+        db/migrate/create_thing.rb
+
+    disco generate model Thing [attr1:type, attr2:type] --domain
+
+    This will create:
+        domain/projections/domain/thing_projection.rb
+        domain/models/domain/thing.rb
+        db/migrate_domain/create_thing.rb

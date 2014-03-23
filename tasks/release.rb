@@ -1,4 +1,4 @@
-FRAMEWORKS = %w( active_event active_domain active_projection drailties )
+FRAMEWORKS = %w( active_event active_domain active_projection disco-railties )
 
 root    = File.expand_path('../../', __FILE__)
 version = File.read("#{root}/RAILS-DISCO_VERSION").strip
@@ -23,7 +23,7 @@ directory "pkg"
       file = Dir[glob].first
       ruby = File.read(file)
 
-      if framework == "rails-disco" || framework == "drailties"
+      if framework == "rails-disco" || framework == "disco-railties"
         major, minor, tiny, pre = version.split('.')
         pre = pre ? pre.inspect : "nil"
 

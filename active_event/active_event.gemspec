@@ -4,12 +4,20 @@ Gem::Specification.new do |s|
   s.name          = 'active_event'
   s.version       = version
 
-  s.authors       = 'Andreas Reischuck'
+  s.authors       = 'HicknHack Software'
   s.email         = 'rails-disco@hicknhack-software.com'
   s.homepage      = 'https://github.com/hicknhack-software/rails-disco'
 
-  s.summary       = 'Simple event sourcing stuff (part of rails-disco)'
-  s.description   = 'Event server, validations, commands and events for rails-disco'
+  s.summary       = 'Commands, Events and Validations for Rails Disco'
+  s.description   = <<-EOF
+    Contains commands, events, validations for Rails Disco.
+
+    Commands are used to transport updates from Rails to the domain.
+    Validations are used to validate commands in Rails and the domain.
+    Events are created in the domain and processed in projections.
+
+    Have a look at the rails-disco documentation on Github for more details.
+EOF
   
   s.license       = 'MIT'
 

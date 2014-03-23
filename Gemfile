@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 gemspec
 
-gem 'drailties', path: 'drailties'
+gem 'disco-railties', path: 'disco-railties'
 
 group :test do
   gem 'rspec', require: false

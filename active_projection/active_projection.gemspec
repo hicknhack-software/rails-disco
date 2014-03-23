@@ -4,12 +4,18 @@ Gem::Specification.new do |s|
   s.name          = 'active_projection'
   s.version       = version
 
-  s.authors       = 'Andreas Reischuck'
+  s.authors       = 'HicknHack Software'
   s.email         = 'rails-disco@hicknhack-software.com'
   s.homepage      = 'https://github.com/hicknhack-software/rails-disco'
 
-  s.summary       = 'Projection related stuff (part of rails-disco)'
-  s.description   = 'Projection environment for rails-disco'
+  s.summary       = 'Projections for Rails Disco'
+  s.description   = <<-EOF
+    Contains everything necessary to build and run projection servers for Rails Disco.
+
+    Projections process events into database models that are optimized for the Rails views.
+
+    Have a look at the rails-disco documentation on Github for more details.
+EOF
   
   s.license       = 'MIT'
 

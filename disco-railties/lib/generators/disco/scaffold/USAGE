@@ -1,0 +1,27 @@
+Description:
+    Scaffolds a complete resource with models, migration, projections, controller, views
+    commands, events and command_processor.
+
+Example:
+    disco generate scaffold Thing [attr1:type, attr2:type]
+
+    This will create:
+        app/controllers/things_controller
+        app/commands/create_thing_command.rb
+        app/commands/update_thing_command.rb
+        app/commands/delete_thing_command.rb
+        domain/command_processors/thing_processor.rb
+        app/events/created_thing_event.rb
+        app/events/updated_thing_event.rb
+        app/events/deleted_thing_event.rb
+        app/projections/things_projection.rb
+        db/migrate/create_things.rb
+        app/models/thing.rb
+        app/helpers/things_helper.rb
+        app/views/things/_eventstream.js.erb
+        app/views/things/_form.html.erb
+        app/views/things/edit.html.erb
+        app/views/things/index.html.erb
+        app/views/things/new.html.erb
+        app/views/things/show.html.erb
+        a resource route

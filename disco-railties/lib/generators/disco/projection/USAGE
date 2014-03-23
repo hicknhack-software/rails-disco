@@ -1,0 +1,13 @@
+Description:
+    Generates a projection with handlers for the given events.
+
+Example:
+    disco generate projection Thing [event event]
+
+    This will create:
+        app/projection/thing_projection.rb
+
+    disco generate projection Thing [event event] --domain
+
+    This will create:
+        domain/projections/domain/thing_projection.rb
