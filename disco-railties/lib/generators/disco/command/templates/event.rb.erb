@@ -7,7 +7,7 @@ class <%= event_class_name %>Event
     <%- if event_attributes_names.include?('id') -%>
     attributes_except :id
     <%- else -%>
-    attributes
+    to_hash
     <%- end -%>
   end
   <%- end -%>
