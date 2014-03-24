@@ -5,6 +5,7 @@ aliases = {
     's' => 'server',
     'ps' => 'projectionserver',
     'g' => 'generate',
+    'd' => 'destroy',
     '-h' => '--help',
     '-v' => '--version',
 }
