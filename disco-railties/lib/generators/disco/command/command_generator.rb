@@ -44,7 +44,7 @@ module Disco
 
     process #{class_name}Command do |command|
       command.is_valid_do do#{extra}
-        command.is_valid_do { event #{event_class_name}Event.new command.to_hash#{merge} }
+        event #{event_class_name}Event.new command.to_hash#{merge}
       end
     end
         EOF
