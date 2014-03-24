@@ -12,7 +12,7 @@ module Disco
       end
 
       def create_model_file
-        template use_domain('model.rb'), use_domain_class_file_path('models', "#{file_name}.rb")
+        template use_domain('model.rb.erb'), use_domain_class_file_path('models', "#{file_name}.rb")
       end
 
       hook_for :migration, require: true do |hook|

@@ -9,7 +9,7 @@ module Disco
       include Domain
 
       included do
-        class_option :domain, type: :boolean, default: false, desc: "generate for the domain"
+        class_option :domain, type: :boolean, default: false, desc: 'generate for the domain'
       end
 
       protected

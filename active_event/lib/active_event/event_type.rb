@@ -24,6 +24,5 @@ module ActiveEvent
 
     private
     attr_writer :store_infos
-
   end
 end

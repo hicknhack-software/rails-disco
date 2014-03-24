@@ -8,7 +8,7 @@ module Disco
       hide!
 
       def create_command_processor_file
-        template 'command_processor.rb', File.join('domain/command_processors', domain_class_path, "#{file_name}_processor.rb")
+        template 'command_processor.rb.erb', File.join('domain/command_processors', domain_class_path, "#{file_name}_processor.rb")
       end
 
       private

@@ -31,5 +31,18 @@ module ActiveEvent
       LOGGER.error e.backtrace.join("\n")
       false
     end
+
+    module ClassMethods
+      def form_name(name)
+        define_singleton_method(:model_name) do
+          @_model_name ||= begin
+            namespace = self.parents.detect do |n|
+              n.respond_to?(:use_relative_model_naming?) && n.use_relative_model_naming?
+            end
+            ActiveModel::Name.new(self, namespace, name)
+          end
+        end
+      end
+    end
   end
 end

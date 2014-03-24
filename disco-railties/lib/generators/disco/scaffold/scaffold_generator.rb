@@ -12,18 +12,20 @@ module Disco
       hook_for :model, in: :disco, require: true
 
       hook_for :command, in: :disco, require: true do |hook|
+        raise 'do not use id as scaffolding attribute! This is reserved for the model id' if attributes_names.include? 'id'
         %w(create update delete).each do |action|
           args = [(class_path + ["#{action}_#{file_name}"]) * '/']
+          args << 'id' unless action == 'create'
           args += attributes_names unless action == 'delete'
           opts = ["--event=#{(class_path + ["#{action}d_#{file_name}"]) * '/'}"]
           opts << "--processor=#{processor_name}" unless skip_processor?
-          opts << '--skip_model' if action == 'delete'
           opts << "--model_name=#{class_name}"
+          opts << '--unique_id' if action == 'create'
           opts << '--persisted' if action == 'update'
+          opts << '--skip_model' if action == 'delete'
           invoke hook, args, opts
           add_to_projections(action)
         end
-        add_to_command_processor
       end
 
       def add_routes
@@ -57,12 +59,6 @@ module Disco
         prepend_to_file File.join('app/views', class_path, plural_file_name, 'show.html.erb'), include_text
       end
 
-      def add_to_command_processor
-        return if behavior == :revoke
-        content = "\n       command.id = ActiveDomain::UniqueCommandIdRepository.new_for command.class.name"
-        insert_into_file File.join('domain/command_processors', domain_class_path, "#{processor_file_name}_processor.rb"), content, after: /(\s)*process(\s)*(.)*CreateCommand(.)*/
-      end
-
       def add_to_projections(action)
         return if behavior == :revoke
         event_func = (class_path + ["#{action}d_#{file_name}_event"]) * '__'
@@ -77,7 +73,7 @@ module Disco
 
       def method_bodies
         @method_bodies ||= {
-            create: "#{class_name}.create! event.values.merge(id: event.id)",
+            create: "#{class_name}.create! event.to_hash",
             update: "#{class_name}.find(event.id).update! event.values",
             delete: "#{class_name}.find(event.id).destroy!",
         }

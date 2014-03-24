@@ -7,6 +7,7 @@ module Disco
     class CommandGenerator < Rails::Generators::NamedBase
       source_root File.expand_path('../templates', __FILE__)
       argument :attributes, type: :array, default: [], banner: 'attribute attribute'
+      class_option :unique_id, type: :boolean, default: false, desc: 'Create a unique id when processing the command'
       class_option :skip_model, type: :boolean, default: false, desc: 'Skip active model from the command'
       class_option :model_name, type: :string, desc: 'Name of the active model behind the command'
       class_option :persisted, type: :boolean, default: false, desc: 'Does the command update an existing model'
@@ -20,7 +21,6 @@ module Disco
 
       def create_related_event_file
         return if skip_event?
-        raise 'do not use id as attribute, this is reserved for the event id itself' if attributes_names.include? 'id'
         template 'event.rb.erb', File.join('app/events', event_class_path, "#{event_file_name}_event.rb")
       end
 
@@ -35,16 +35,28 @@ module Disco
 
       def add_to_command_processor
         return if skip_processor? || (behavior == :revoke)
-        content = "
+        extra, merge = '', ''
+        if unique_id?
+          extra = "\n        id = ActiveDomain::UniqueCommandIdRepository.new_for command.class.name"
+          merge = '.merge(id: id)'
+        end
+        content = <<-EOF
 
     process #{class_name}Command do |command|
-      command.is_valid_do { event #{event_class_name}Event.new command.to_hash }
-    end"
+      command.is_valid_do do#{extra}
+        command.is_valid_do { event #{event_class_name}Event.new command.to_hash#{merge} }
+      end
+    end
+        EOF
         file = File.join('domain/command_processors', processor_domain_class_path, "#{processor_file_name}_processor.rb")
-        inject_into_file file, content, after: /(\s)*include(\s)*ActiveDomain::CommandProcessor/
+        inject_into_file file, content, after: /\s*include\s+ActiveDomain::CommandProcessor/
       end
 
       protected
+
+      def unique_id?
+        options[:unique_id]
+      end
 
       def skip_model?
         options[:skip_model]
@@ -56,6 +68,14 @@ module Disco
 
       def persisted?
         options[:persisted]
+      end
+
+      def event_attributes_names
+        @event_attribute_names ||= if unique_id?
+                                     attributes_names.dup.unshift 'id'
+                                   else
+                                     attributes_names
+                                   end
       end
 
       private

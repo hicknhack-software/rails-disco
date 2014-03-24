@@ -6,8 +6,8 @@ module Disco
       extend ActiveSupport::Concern
 
       included do
-        class_option :processor, type: :string, default: nil, desc: "class_name of the command processor (defaults to NAME)"
-        class_option :skip_processor, type: :boolean, default: false, desc: "Skip command processor generation"
+        class_option :processor, type: :string, default: nil, desc: 'class_name of the command processor (defaults to NAME)'
+        class_option :skip_processor, type: :boolean, default: false, desc: 'Skip command processor generation'
       end
 
       def initialize(args, *options)

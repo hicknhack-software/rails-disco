@@ -1,10 +1,14 @@
 <% module_namespacing do -%>
 class <%= event_class_name %>Event
   include ActiveEvent::EventType
-  attributes <%= (['id'] + attributes_names).map{|x| ":#{x}"}.join(', ') %>
-  <%- unless attributes_names.empty? -%>
+  attributes <%= event_attributes_names.map{|x| ":#{x}"}.join(', ') %>
+  <%- unless attributes_names == ['id'] -%>
   def values
+    <%- if event_attributes_names.include?('id') -%>
     attributes_except :id
+    <%- else -%>
+    attributes
+    <%- end -%>
   end
   <%- end -%>
 end
