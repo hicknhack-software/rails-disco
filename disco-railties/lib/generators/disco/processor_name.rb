@@ -12,7 +12,7 @@ module Disco
 
       def initialize(args, *options)
         super
-        assign_processor_names!(processor_name)
+        assign_processor_name!(processor_name)
       end      
 
       protected
@@ -38,7 +38,7 @@ module Disco
 
       private
 
-      def assign_processor_names!(processor_name)
+      def assign_processor_name!(processor_name)
         @processor_class_path = processor_name.include?('/') ? processor_name.split('/') : processor_name.split('::')
         @processor_class_path.map! &:underscore
         @processor_file_name = @processor_class_path.pop

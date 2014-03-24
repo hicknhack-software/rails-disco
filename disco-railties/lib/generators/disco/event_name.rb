@@ -6,7 +6,7 @@ module Disco
       extend ActiveSupport::Concern
 
       included do
-        class_option :event, type: :string, default: nil, desc: 'name of the event (defaults to NAME)'
+        class_option :event, type: :string, default: nil, desc: 'class_name of the event (defaults to NAME)'
         class_option :skip_event, type: :boolean, default: false, desc: 'skip event generation'
       end
 
