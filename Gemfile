@@ -17,3 +17,9 @@ end
 platforms :jruby do
   gem 'activerecord-jdbcsqlite3-adapter', '>= 1.3.0'
 end
+
+platforms :rbx do
+  gem 'racc'
+  gem 'rubysl', '~> 2.0'
+  gem 'psych'
+end
