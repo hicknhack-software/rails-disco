@@ -44,9 +44,9 @@ class <%= controller_class_name %>Controller < ApplicationController
     delete_<%= singular_table_name %> = <%= command_class_name('delete') %>Command.new(id: params[:id])
     session[:tmp_event_id] = event_id = Domain.run_command(delete_<%= singular_table_name %>)
     if event_id
-      redirect_to <%= index_helper %>_path, notice: <%= "'#{human_name} was successfully destroyed.'" %>
+      redirect_to <%= index_helper %>_url, notice: <%= "'#{human_name} was successfully destroyed.'" %>
     else
-      redirect_to <%= singular_table_name %>_path(id: params[:id]), alert: <%= "'#{human_name} could not be deleted.'" %>
+      redirect_to <%= singular_table_name %>_url(id: params[:id]), alert: <%= "'#{human_name} could not be deleted.'" %>
     end
   end
 
