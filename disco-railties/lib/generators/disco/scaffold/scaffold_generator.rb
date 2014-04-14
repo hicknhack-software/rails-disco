@@ -64,15 +64,14 @@ module Disco
 
       def add_event_stream_to_views
         return if behavior == :revoke
-        include_text = '<%= javascript_tag render partial: \'application/eventstream/eventstream\', formats: [:js], locals: {event_id: @event_id} %>'
+        include_text = "<%= javascript_tag render partial: 'application/eventstream/eventstream', formats: [:js], locals: {event_id: @event_id} %>\n"
         prepend_to_file File.join('app/views', class_path, plural_file_name, 'index.html.erb'), include_text
         prepend_to_file File.join('app/views', class_path, plural_file_name, 'show.html.erb'), include_text
       end
 
       def add_to_projections(action)
         return if behavior == :revoke
-        content = "
-
+        content = "\n
   def #{projection_name_for_action(action)}(event)
     #{projection_body_for_action(action)}
   end"
