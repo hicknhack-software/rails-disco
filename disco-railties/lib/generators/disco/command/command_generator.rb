@@ -6,7 +6,7 @@ module Disco
   module Generators
     class CommandGenerator < Rails::Generators::NamedBase
       source_root File.expand_path('../templates', __FILE__)
-      argument :attributes, type: :array, default: [], banner: 'attribute attribute'
+      argument :attributes, type: :array, default: [], banner: '[attribute] [attribute]'
       class_option :unique_id, type: :boolean, default: false, desc: 'Create a unique id when processing the command'
       class_option :skip_model, type: :boolean, default: false, desc: 'Skip active model from the command'
       class_option :model_name, type: :string, desc: 'Name of the active model behind the command'

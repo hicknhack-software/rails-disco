@@ -3,7 +3,7 @@ Description:
     commands, events and command_processor.
 
 Example:
-    disco generate scaffold Thing [attr1:type, attr2:type]
+    disco generate scaffold Thing title:string
 
     This will create:
         app/controllers/things_controller
