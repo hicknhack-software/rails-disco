@@ -1,7 +1,7 @@
 module ActiveProjection
   # Returns the version of the currently loaded ActiveProjection as a Gem::Version
   def self.version
-    Gem::Version.new '0.5.0.rc1'
+    Gem::Version.new '0.5.0.rc4'
   end
 
   module VERSION #:nodoc:

@@ -3,7 +3,7 @@ module RailsDisco
     MAJOR = 0
     MINOR = 5
     TINY  = 0
-    PRE   = "rc1"
+    PRE   = "rc4"
 
     STRING = [MAJOR, MINOR, TINY, PRE].compact.join(".")
   end
