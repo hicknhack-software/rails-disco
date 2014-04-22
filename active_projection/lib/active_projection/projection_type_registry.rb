@@ -4,45 +4,25 @@ module ActiveProjection
   class ProjectionTypeRegistry
     include Singleton
 
+    # register a new projection class
+    #
+    # The best way to create a new projection is using the ProjectionType module
+    # This module automatically registers each class
     def self.register(projection)
       self.registry << projection
     end
 
-    def self.process(headers, event)
-      instance.process headers, event
+    # @return an enumerable with all projections
+    def self.projections
+      instance.projections.each
     end
 
-    def process(headers, event)
-      projections.each do |projection|
-        ActiveRecord::Base.transaction do
-          projection.invoke(event, headers) if projection.evaluate headers
-        end
-      end
-    end
-
-    def self.sync_projections
-      instance.sync_projections
-    end
-
-    def sync_projections
-      projections.each do |projection|
-        ProjectionRepository.create_or_get(projection.class.name)
-      end
+    def projections
+      @projections ||= self.class.registry.freeze.map { |projection_class| projection_class.new }.freeze
     end
 
     private
 
-    cattr_accessor :registry
-    attr_accessor :projections
-
-    def initialize
-      self.projections = []
-      self.class.registry.freeze.each do |projection|
-        projections << projection.new
-      end
-      projections.freeze
-    end
-
-    self.registry = []
+    cattr_accessor(:registry) { [] }
   end
 end

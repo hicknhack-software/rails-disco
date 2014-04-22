@@ -22,7 +22,7 @@ describe ActiveProjection::ProjectionTypeRegistry do
   end
 
   it 'synchronizes the known projections with the db' do
-    expect(ActiveProjection::ProjectionRepository).to receive(:create_or_get).with('TestProjection')
+    expect(ActiveProjection::ProjectionRepository).to receive(:ensure_exists).with('TestProjection')
     ActiveProjection::ProjectionTypeRegistry.sync_projections
   end
 end

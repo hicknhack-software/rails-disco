@@ -10,7 +10,7 @@ module ActiveDomain
     end
 
     def self.create_or_get(command_name)
-      UniqueCommandId.where(command: command_name).first || UniqueCommandId.create!(command: command_name, last_id: 0)
+      UniqueCommandId.find_or_create_by! command: command_name
     end
 
     def self.create_new(command)

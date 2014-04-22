@@ -9,11 +9,10 @@ require 'active_record'
 
 WORKER_COUNT = [ENV['WORKER_COUNT'].to_i, 1].max
 WORKER_NUMBER = ENV['WORKER_NUMBER'].to_i
-LOGGER = ActiveEvent::Support::MultiLogger.new "Projection Server#{WORKER_COUNT > 1 ? " Nr. #{WORKER_NUMBER}" : ""}"
+LOGGER = ActiveEvent::Support::MultiLogger.new "Projection Server#{WORKER_COUNT > 1 ? " Nr. #{WORKER_NUMBER}" : ''}"
 
 ActiveEvent::Autoload.app_path = ROOT_DIR
 ActiveProjection::Autoload.app_path = ROOT_DIR
-ActiveProjection::Autoload.worker_config = {path: ROOT_DIR, count: WORKER_COUNT, number: WORKER_NUMBER}
 
 watchable_dirs = ActiveEvent::Autoload.watchable_dirs.merge ActiveProjection::Autoload.watchable_dirs
 RELOADER = ActiveSupport::FileUpdateChecker.new([], watchable_dirs) do

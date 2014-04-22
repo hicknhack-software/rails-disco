@@ -52,12 +52,11 @@ module ActiveProjection
         rescue Exception => e
           LOGGER.error "[#{self.class.name}]: error processing #{event_type}[#{event_id}]\n#{e.message}\n#{e.backtrace}"
           set_broken
+          raise
         end
       end
-      if solid?
-        update_last_id event_id
-        LOGGER.debug "[#{self.class.name}]: sucessfully processed #{event_type}[#{event_id}]"
-      end
+      update_last_id event_id
+      LOGGER.debug "[#{self.class.name}]: sucessfully processed #{event_type}[#{event_id}]"
     end
 
     private
@@ -69,7 +68,7 @@ module ActiveProjection
     end
 
     def projection_id
-      @projection_id ||= ProjectionRepository.create_or_get(self.class.name).id
+      @projection_id ||= ProjectionRepository.ensure_exists(self.class.name).id
     end
 
     def solid?

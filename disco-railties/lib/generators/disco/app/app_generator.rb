@@ -37,6 +37,7 @@ gem 'puma'\n" unless behavior == :revoke
       inside 'config/initializers' do
         template 'create_domain.rb'
         copy_file 'build_validations_registry.rb'
+        copy_file 'event_source_server.rb'
       end
     end
 
@@ -70,7 +71,7 @@ gem 'puma'\n" unless behavior == :revoke
 
       def add_event_source_route
         return if behavior == :revoke
-        route "get 'event_stream' => 'event_source#stream'"
+        route "get 'event_source/:projection/:event' => 'event_source#projected'"
       end
 
       def enable_rake_tasks

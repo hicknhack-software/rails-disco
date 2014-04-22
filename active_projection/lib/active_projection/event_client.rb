@@ -1,77 +1,139 @@
 require 'singleton'
 require 'bunny'
+
 module ActiveProjection
   class EventClient
     include Singleton
 
     def self.start(options)
-      instance.options = options
-      instance.start
+      instance.configure(options).start
+    end
+
+    def configure(options)
+      raise 'Unsupported! Cannot configure running client' if running
+      self.options = options
+      self
     end
 
     def start
-      event_connection.start
-      sync_projections
-      listen_for_events
-      request_missing_events
-      event_channel.work_pool.join
+      run_once do
+        prepare
+        sync_projections
+        listen_for_events
+        listen_for_replayed_events
+        request_missing_events
+        event_channel.work_pool.join
+      end
     rescue Interrupt
       LOGGER.info 'Catching Interrupt'
     rescue Exception => e
       LOGGER.error e.message
       LOGGER.error e.backtrace.join("\n")
-      raise e
+      raise
+    end
+
+    private
+
+    attr_accessor :options
+    attr_accessor :running # true once start was called
+    attr_accessor :current # true after missing events are processed
+    attr_accessor :delay_queue # stores events while processing missing events
+
+    def run_once
+      raise 'Unsupported! Connot start a running client' if running
+      self.running = true
+      yield
+    ensure
+      self.running = false
+    end
+
+    def prepare
+      self.delay_queue = []
+      init_database_connection
+      event_connection.start
+    end
+
+    def init_database_connection
+      ActiveRecord::Base.establish_connection options[:projection_database]
     end
 
     def sync_projections
-      ProjectionTypeRegistry.sync_projections
+      server_projections.each do |projection|
+        CachedProjectionRepository.ensure_solid(projection.class.name)
+      end
+    end
+
+    def server_projections
+      @server_projections ||= ProjectionTypeRegistry.projections.drop(WORKER_NUMBER).each_slice(WORKER_COUNT).map(&:first)
     end
 
     def listen_for_events
-      subscribe_to event_queue do |delivery_info, properties, body|
-        event_received properties, body
-        send_browser_notification properties.headers[:id]
+      event_queue.subscribe do |delivery_info, properties, body|
+        if current
+          event_received properties, body
+        else
+          delay_queue << [properties, body]
+        end
+      end
+    end
+
+    def listen_for_replayed_events
+      replay_queue.subscribe do |delivery_info, properties, body|
+        if 'replay_done' == body
+          replay_done
+        else
+          event_received properties, body
+        end
       end
     end
 
     def request_missing_events
-      listen_for_replayed_events
-      send_request_for min_last_id
+      send_request_for(CachedProjectionRepository.last_ids.min || 0)
     end
 
-    def listen_for_replayed_events
-      subscribe_to replay_queue do |delivery_info, properties, body|
-        event_received properties, body unless replay_done? body
-      end
-    end
-
-    def send_browser_notification(id)
-      server_side_events_exchange.publish id.to_s
+    def send_projection_notification(event_id, projection, error = nil)
+      message = {event: event_id, projection: projection.class.name}
+      message.merge error: error.message, backtrace: error.backtrace if error
+      server_side_events_exchange.publish message.to_json
     end
 
     def send_request_for(id)
       resend_request_exchange.publish id.to_s, routing_key: 'resend_request'
     end
 
-    def replay_done?(body)
-      if 'replay_done' == body
-        LOGGER.debug 'All replayed events received'
-        broken_projections = ProjectionRepository.get_all_broken
-        LOGGER.error "These projections are still broken: #{broken_projections.join(", ")}" unless broken_projections.empty?
-        replay_queue.unbind(resend_exchange)
-        return true
-      end
-      false
+    def replay_done
+      LOGGER.debug 'All replayed events received'
+      broken_projections = CachedProjectionRepository.get_all_broken
+      LOGGER.error "These projections are still broken: #{broken_projections.join(", ")}" unless broken_projections.empty?
+      replay_queue.unbind(resend_exchange)
+      self.current = true
+      flush_delay_queue
+    end
+
+    def flush_delay_queue
+      delay_queue.each { |properties, body| event_received properties, body }
+      self.delay_queue = []
     end
 
     def event_received(properties, body)
       RELOADER.execute_if_updated
       LOGGER.debug "Received #{properties.type} with #{body}"
-      ProjectionTypeRegistry.process properties.headers.deep_symbolize_keys!, build_event(properties.type, JSON.parse(body))
+      headers = properties.headers.deep_symbolize_keys!
+      event = ActiveEvent::EventType.create_instance properties.type, JSON.parse(body).deep_symbolize_keys!
+      process_event headers, event
     end
 
-    def build_event(type, data)
-      Object.const_get(type).new(data.deep_symbolize_keys)
+    def process_event(headers, event)
+      server_projections.select { |p| p.evaluate headers }.each do |projection|
+        begin
+          ActiveRecord::Base.transaction do
+            projection.invoke event, headers
+          end
+          send_projection_notification headers[:id], projection
+        rescue Exception => e
+          send_projection_notification headers[:id], projection, e
+        end
+      end
     end
 
     def replay_queue
@@ -80,14 +142,6 @@ module ActiveProjection
 
     def event_queue
       @event_queue ||= event_channel.queue('', auto_delete: true).bind(event_exchange)
-    end
-
-    def min_last_id
-      ProjectionRepository.last_ids.min || 0
-    end
-
-    def subscribe_to(queue, &block)
-      queue.subscribe(&block)
     end
 
     def event_connection
@@ -113,11 +167,5 @@ module ActiveProjection
     def server_side_events_exchange
       @server_side_events_exchange ||= event_channel.fanout "server_side_#{options[:event_exchange]}"
     end
-
-    def options
-      @options
-    end
-
-    attr_writer :options
   end
 end

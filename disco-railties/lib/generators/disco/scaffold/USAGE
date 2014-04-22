@@ -6,7 +6,7 @@ Example:
     disco generate scaffold Thing title:string
 
     This will create:
-        app/controllers/things_controller
+        app/controllers/things_controller.rb
         app/commands/create_thing_command.rb
         app/commands/update_thing_command.rb
         app/commands/delete_thing_command.rb
@@ -14,7 +14,7 @@ Example:
         app/events/created_thing_event.rb
         app/events/updated_thing_event.rb
         app/events/deleted_thing_event.rb
-        app/projections/things_projection.rb
+        app/projections/thing_projection.rb
         db/migrate/create_things.rb
         app/models/thing.rb
         app/helpers/things_helper.rb

@@ -12,7 +12,6 @@ module ActiveProjection
     end
 
     def run
-      ActiveRecord::Base.establish_connection options[:projection_database]
       EventClient.start options
     end
 
