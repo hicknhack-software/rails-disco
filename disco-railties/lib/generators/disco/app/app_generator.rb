@@ -15,6 +15,9 @@ gem 'puma'\n" unless behavior == :revoke
     def app
       super
       copy_file 'app/controllers/event_source_controller.rb'
+      copy_file 'app/controllers/concerns/event_source.rb'
+      copy_file 'app/helpers/event_source_helper.rb'
+      copy_file 'app/assets/javascripts/event_source.js'
       keep_file 'app/commands'
       keep_file 'app/events'
       keep_file 'app/projections'
@@ -71,7 +74,7 @@ gem 'puma'\n" unless behavior == :revoke
 
       def add_event_source_route
         return if behavior == :revoke
-        route "get 'event_source/:projection/:event' => 'event_source#projected'"
+        route "get 'event_source/:projection/:event' => 'event_source#projected', as: 'event_source'"
       end
 
       def enable_rake_tasks

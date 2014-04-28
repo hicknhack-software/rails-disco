@@ -93,7 +93,7 @@ module ActiveProjection
 
     def send_projection_notification(event_id, projection, error = nil)
       message = {event: event_id, projection: projection.class.name}
-      message.merge error: error.message, backtrace: error.backtrace if error
+      message.merge! error: "#{error.class.name}: #{error.message}", backtrace: error.backtrace if error
       server_side_events_exchange.publish message.to_json
     end
 

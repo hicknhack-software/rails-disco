@@ -16,7 +16,7 @@ module ActiveEvent
     end
 
     def run_command(command)
-      server.run_command command
+      command.valid? && server.run_command(command)
     end
 
     private

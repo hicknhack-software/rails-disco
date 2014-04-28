@@ -2,11 +2,23 @@ require 'singleton'
 require 'bunny'
 
 module ActiveEvent
+  class ProjectionException < Exception
+    # prevent better errors from tracing this exception
+    def __better_errors_bindings_stack; [] end
+  end
+end
+
   class EventSourceServer
     include Singleton
 
-    def self.after_event_projection(event_id, projection, &block)
-      instance.after_event_projection(event_id, projection, &block)
+    class << self
+      def after_event_projection(event_id, projection, &block)
+        instance.after_event_projection(event_id, projection, &block)
+      end
+
+      def projection_status(projection)
+        instance.projection_status(projection)
+      end
     end
 
     def after_event_projection(event_id, projection)
@@ -21,8 +33,16 @@ module ActiveEvent
             projection_status.waiters[event_id].delete cv
           end
         end
+        raise ProjectionException, projection_status.error, projection_status.backtrace if projection_status.error
       end
       yield
+    end
+
+    def projection_status(projection)
+      mutex.synchronize do
+        projection_status = status[projection]
+        raise ProjectionException, projection_status.error, projection_status.backtrace if projection_status.error
+      end
     end
 
     private

@@ -35,12 +35,7 @@ module Disco
 
       hook_for :scaffold_controller, in: :disco, require: true do |hook|
         invoke hook
-        add_event_stream_to_views
-      end
-
-      def copy_event_stream_client
-        # ensure if app was created before this was default
-        copy_file '_eventstream.js.erb', 'app/views/application/eventstream/_eventstream.js.erb', verbose: false, skip: true
+        add_event_source_to_views
       end
 
       protected
@@ -62,9 +57,9 @@ module Disco
         opts
       end
 
-      def add_event_stream_to_views
+      def add_event_source_to_views
         return if behavior == :revoke
-        include_text = "<%= javascript_tag render partial: 'application/eventstream/eventstream', formats: [:js], locals: {event_id: @event_id, projection: '#{class_name}Projection'} %>\n"
+        include_text = "<%= event_source('#{class_name}Projection') %>\n"
         prepend_to_file File.join('app/views', class_path, plural_file_name, 'index.html.erb'), include_text
         prepend_to_file File.join('app/views', class_path, plural_file_name, 'show.html.erb'), include_text
       end

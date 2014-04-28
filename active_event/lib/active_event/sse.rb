@@ -6,11 +6,17 @@ module ActiveEvent
       @io = io
     end
 
-    def write(object, options = {})
-      options.each do |k, v|
-        @io.write "#{k}: #{v}\n"
+    def event(event, data = nil, options = {})
+      self.data options.merge(event: event, data: JSON.dump(data))
+    end
+
+    def data(data)
+      data.each_pair do |key, value|
+        (value+"\n").split("\n", -1)[0..-2].each do |v|
+          @io.write "#{key}: #{v}\n"
+        end
       end
-      @io.write "data: #{JSON.dump(object)}\n\n"
+      @io.write "\n"
     end
 
     def close
