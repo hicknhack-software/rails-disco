@@ -1,0 +1,4 @@
+
+.alert-projection { border: solid 2px #f44; padding: 4px; }
+.alert-projection .message { font-size: 200%; color: #f44; }
+.alert-projection .backtrace { white-space: pre; }

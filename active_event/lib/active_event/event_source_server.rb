@@ -6,7 +6,6 @@ module ActiveEvent
     # prevent better errors from tracing this exception
     def __better_errors_bindings_stack; [] end
   end
-end
 
   class EventSourceServer
     include Singleton

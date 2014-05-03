@@ -8,9 +8,9 @@ class EventSourceController < ApplicationController
       sse.event('projected')
     end
   rescue IOError
-    # ignored
-  rescue ProjectionException => e
-    sse.event('exception', error: e.message, backtrace: e.backtrace)
+    # ignore disconnect
+  rescue ActiveEvent::ProjectionException => e
+    sse.event('exception', {error: e.message, backtrace: e.backtrace})
   ensure
     sse.close
   end

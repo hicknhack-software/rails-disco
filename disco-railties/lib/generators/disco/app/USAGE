@@ -7,8 +7,21 @@ Example:
     This will create:
         bin/disco
         app/controllers/event_source_controller.rb
-        a route for this controller
+        app/controllers/concerns/event_source.rb
+        app/helpers/event_source_helper.rb
+        app/assets/javascripts/event_source.js
+        app/assets/stylesheets/event_source.css
         config/initializers/build_validations_registry.rb
         config/initializers/create_domain.rb
+        config/initializers/event_source_server.rb
         config/disco.yml
+        app/commands/
+        app/events/
+        app/projections/
+        app/validations/
+        domain/command_processors/domain/
+        domain/models/domain/
+        domain/projections/domain/
+        domain/validations/domain/
+        adds event_source route
         adds rails-disco to your gemfile

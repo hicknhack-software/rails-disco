@@ -18,6 +18,7 @@ gem 'puma'\n" unless behavior == :revoke
       copy_file 'app/controllers/concerns/event_source.rb'
       copy_file 'app/helpers/event_source_helper.rb'
       copy_file 'app/assets/javascripts/event_source.js'
+      copy_file 'app/assets/stylesheets/event_source.css'
       keep_file 'app/commands'
       keep_file 'app/events'
       keep_file 'app/projections'
