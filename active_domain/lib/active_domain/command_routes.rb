@@ -1,3 +1,5 @@
+require 'active_event/domain'
+
 module ActiveDomain
   class CommandRoutes
     def version
@@ -15,7 +17,7 @@ module ActiveDomain
     rescue Exception => e
       LOGGER.error e.message
       LOGGER.error e.backtrace.join("\n")
-      raise e
+      raise ActiveEvent::DomainExceptionCapture, ["#{e.class.name}: #{e.message}", e.backtrace].to_json, e.backtrace
     end
 
     def self.route(type, processor, method)

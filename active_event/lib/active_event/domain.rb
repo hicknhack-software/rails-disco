@@ -2,6 +2,14 @@ require 'singleton'
 require 'drb/drb'
 
 module ActiveEvent
+  class DomainExceptionCapture < StandardError
+  end
+
+  class DomainException < StandardError
+    # prevent better errors from tracing this exception
+    def __better_errors_bindings_stack; [] end
+  end
+
   module Domain
     extend ActiveSupport::Concern
 
@@ -17,6 +25,9 @@ module ActiveEvent
 
     def run_command(command)
       command.valid? && server.run_command(command)
+    rescue DomainExceptionCapture => e
+      message, backtrace = JSON.parse(e.message)
+      raise DomainException, message, backtrace
     end
 
     private

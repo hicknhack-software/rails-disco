@@ -2,7 +2,7 @@ require 'singleton'
 require 'bunny'
 
 module ActiveEvent
-  class ProjectionException < Exception
+  class ProjectionException < StandardError
     # prevent better errors from tracing this exception
     def __better_errors_bindings_stack; [] end
   end

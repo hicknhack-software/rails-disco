@@ -19,17 +19,8 @@ module ActiveEvent
     include ActiveEvent::Support::AttrSetter
     include ActiveModel::Validations
 
-    def is_valid_do(&block)
-      if valid?
-        block.call
-      else
-        false
-      end
-    rescue Exception => e
-      LOGGER.error "Validation failed for #{self.class.name}"
-      LOGGER.error e.message
-      LOGGER.error e.backtrace.join("\n")
-      false
+    def is_valid_do
+      yield if valid?
     end
 
     module ClassMethods
