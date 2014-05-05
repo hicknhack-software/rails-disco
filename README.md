@@ -1,3 +1,4 @@
+[<img src="https://github.com/hicknhack-software/rails-disco/raw/logo/rails-disco-log.png" alt="Rails Disco Logo" width="200" />](https://github.com/hicknhack-software/rails-disco)
 [![Build Status](https://travis-ci.org/hicknhack-software/rails-disco.svg?branch=master)](https://travis-ci.org/hicknhack-software/rails-disco) 
 [![Coverage Status](https://coveralls.io/repos/hicknhack-software/rails-disco/badge.png)](https://coveralls.io/r/hicknhack-software/rails-disco)
 [![Dependency Status](https://gemnasium.com/hicknhack-software/rails-disco.png)](https://gemnasium.com/hicknhack-software/rails-disco) 
