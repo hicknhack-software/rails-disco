@@ -56,7 +56,7 @@ module ActiveProjection
         end
       end
       update_last_id event_id
-      LOGGER.debug "[#{self.class.name}]: sucessfully processed #{event_type}[#{event_id}]"
+      LOGGER.debug "[#{self.class.name}]: successfully processed #{event_type}[#{event_id}]"
     end
 
     private
