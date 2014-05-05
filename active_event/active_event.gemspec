@@ -25,8 +25,8 @@ EOF
   s.require_path = 'lib'
   s.test_files    = Dir['spec/**/*']
 
-  s.add_dependency 'activerecord', '>3.2.0', '<4.1.0'
-  s.add_dependency 'activemodel', '>3.2.0', '<4.1.0'
+  s.add_dependency 'activerecord', '>3.2.0', '<4.2.0'
+  s.add_dependency 'activemodel', '>3.2.0', '<4.2.0'
   s.add_dependency 'bunny'
 
   s.add_development_dependency 'bundler', '~> 1.3'

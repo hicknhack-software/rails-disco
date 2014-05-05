@@ -23,5 +23,5 @@ Gem::Specification.new do |s|
   s.add_dependency 'active_domain', version
   s.add_dependency 'active_projection', version
 
-  s.add_dependency 'rails', '~> 4.0.0'
+  s.add_dependency 'rails', '> 3.2.0', '< 4.2.0'
 end
