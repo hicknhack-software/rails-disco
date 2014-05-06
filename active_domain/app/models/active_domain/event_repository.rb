@@ -10,7 +10,7 @@ module ActiveDomain
     end
 
     def self.store(event)
-      stored_event = ActiveDomain::Event.create!(event: event.class.name, data: event)
+      stored_event = ActiveDomain::Event.create!(event: event.class.name, data: event.to_hash)
       event.add_store_infos id: stored_event.id, created_at: stored_event.created_at
     end
   end
