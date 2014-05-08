@@ -19,6 +19,8 @@ module Disco
         invoke hook, ["create_#{table_name}", *attributes]
       end
 
+      hook_for :test_framework
+
       private
 
       # do not parse - keep attributes for forwarding to migration
