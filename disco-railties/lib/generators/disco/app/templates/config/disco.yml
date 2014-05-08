@@ -12,6 +12,11 @@ development:
 
 test:
 <%= domain_database(:test, 2) -%>
+  event_connection:
+    scheme: amqp
+    host: 127.0.0.1
+    port: 5672
+  event_exchange: events
 
 production:
 <%= domain_database(:production, 2) -%>
