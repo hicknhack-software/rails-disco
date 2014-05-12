@@ -1,3 +1,4 @@
+require 'yaml'
 require 'active_support'
 require 'active_support/core_ext'
 require 'active_event/version'

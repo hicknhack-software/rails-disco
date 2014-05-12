@@ -1,7 +1,7 @@
 module ActiveDomain
   # Returns the version of the currently loaded ActiveDomain as a Gem::Version
   def self.version
-    Gem::Version.new '0.5.1'
+    Gem::Version.new '0.5.2'
   end
 
   module VERSION #:nodoc:
