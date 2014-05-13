@@ -127,7 +127,7 @@ require 'rails-disco/tasks'"
 
       def indent(content, multiplier = 2)
         spaces = ' ' * multiplier
-        content.each_line.map {|line| line.blank? ? line : "#{spaces}#{line}" }.join
+        content.each_line.map { |line| line.blank? ? line : "#{spaces}#{line}" }.join
       end
 
       def wrap_with_namespace(content)

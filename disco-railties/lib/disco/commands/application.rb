@@ -10,7 +10,7 @@ if ARGV.first != 'new'
 else
   ARGV.shift
   unless ARGV.delete('--no-rc')
-    customrc = ARGV.index{ |x| x.include?('--rc=') }
+    customrc = ARGV.index { |x| x.include?('--rc=') }
     railsrc = if customrc
                 File.expand_path(ARGV.delete_at(customrc).gsub(/--rc=/, ''))
               else
@@ -18,7 +18,7 @@ else
               end
     if File.exist?(railsrc)
       extra_args_string = File.read(railsrc)
-      extra_args = extra_args_string.split(/\n+/).map {|l| l.split}.flatten
+      extra_args = extra_args_string.split(/\n+/).map { |l| l.split }.flatten
       puts "Using #{extra_args.join(' ')} from #{railsrc}"
       ARGV.insert(1, *extra_args)
     end

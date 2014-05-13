@@ -29,7 +29,7 @@ module Disco
       end
 
       def event_class_name
-        (event_class_path + [event_file_name]).map!{ |m| m.camelize }.join('::')
+        (event_class_path + [event_file_name]).map! { |m| m.camelize }.join('::')
       end
 
       def event_file_path

@@ -13,7 +13,7 @@ describe ActiveEvent::EventServer do
     end
 
     it 'updates the replay server if its running' do
-      @server.instance_variable_set(:@replay_server_thread, Thread.new {sleep 1})
+      @server.instance_variable_set(:@replay_server_thread, Thread.new { sleep 1 })
       expect(ActiveEvent::ReplayServer).to receive(:update)
       @server.resend_events_after 1
     end
