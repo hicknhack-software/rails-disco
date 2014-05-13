@@ -43,7 +43,7 @@ module Disco
         content = <<-EOF
 
     process #{class_name}Command do |command|
-      command.is_valid_do do#{extra}
+      if command.valid?#{extra}
         event #{event_class_name}Event.new command.to_hash#{merge}
       end
     end

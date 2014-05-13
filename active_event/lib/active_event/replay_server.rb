@@ -42,7 +42,7 @@ module ActiveEvent
     end
 
     def republish_events
-      while has_next_event?
+      while next_event?
         return if new_id?
         republish next_event
         Thread.pass
@@ -73,7 +73,7 @@ module ActiveEvent
       e
     end
 
-    def has_next_event?
+    def next_event?
       @events.length > 0
     end
 

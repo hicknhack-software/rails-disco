@@ -19,10 +19,6 @@ module ActiveEvent
     include ActiveEvent::Support::AttrSetter
     include ActiveModel::Validations
 
-    def is_valid_do
-      yield if valid?
-    end
-
     module ClassMethods
       def form_name(name)
         define_singleton_method(:model_name) do

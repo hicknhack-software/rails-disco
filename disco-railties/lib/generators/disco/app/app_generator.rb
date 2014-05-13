@@ -115,7 +115,7 @@ require 'rails-disco/tasks'"
       def domain_database(env, indent_level)
         config = YAML.load(File.read('config/database.yml'))[env.to_s]
         config['database'].sub!(/.*#{env}/, '\0_domain')
-        indent( ({'domain_database' => config}.to_yaml(indentation: 2))[4..-1], indent_level)
+        indent(({'domain_database' => config}.to_yaml(indentation: 2))[4..-1], indent_level)
       end
 
       # copied namespace support from NamedBase
