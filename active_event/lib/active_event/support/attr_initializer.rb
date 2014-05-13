@@ -1,73 +1,75 @@
-module ActiveEvent::Support
-  class ForbiddenAttributesError < StandardError
-  end
-
-  class UnknownAttributeError < StandardError
-  end
-
-  # Allows to initialize attributes with a hash
-  #
-  # example:
-  #   class RgbColor
-  #     include ActiveEvent::AttrInitializer
-  #     attributes :r, :g, :b
-  #   end
-  #   green = RgbColor.new r: 250, g: 20, b: 20
-  module AttrInitializer
-    extend ActiveSupport::Concern
-
-    def initialize(*args)
-      hash = (args.last.is_a?(Hash) ? args.pop : {})
-      super
-      check_attributes hash
-      init_attributes hash
+module ActiveEvent
+  module Support
+    class ForbiddenAttributesError < StandardError
     end
 
-    def freeze
-      attributes.freeze
+    class UnknownAttributeError < StandardError
     end
 
-    def attributes_except(*args)
-      attributes.reject { |k, _| args.include? k }
-    end
+    # Allows to initialize attributes with a hash
+    #
+    # example:
+    #   class RgbColor
+    #     include ActiveEvent::AttrInitializer
+    #     attributes :r, :g, :b
+    #   end
+    #   green = RgbColor.new r: 250, g: 20, b: 20
+    module AttrInitializer
+      extend ActiveSupport::Concern
 
-    def to_hash
-      attributes.dup
-    end
-
-    module ClassMethods
-      def self.extended(base)
-        base.attribute_keys = []
+      def initialize(*args)
+        hash = (args.last.is_a?(Hash) ? args.pop : {})
+        super
+        check_attributes hash
+        init_attributes hash
       end
 
-      attr_accessor :attribute_keys
+      def freeze
+        attributes.freeze
+      end
 
-      def attributes(*args)
-        self.attribute_keys += args
-        args.each do |attr|
-          define_method attr, -> { attributes[attr] }
+      def attributes_except(*args)
+        attributes.reject { |k, _| args.include? k }
+      end
+
+      def to_hash
+        attributes.dup
+      end
+
+      module ClassMethods
+        def self.extended(base)
+          base.attribute_keys = []
+        end
+
+        attr_accessor :attribute_keys
+
+        def attributes(*args)
+          self.attribute_keys += args
+          args.each do |attr|
+            define_method attr, -> { attributes[attr] }
+          end
         end
       end
-    end
 
-    protected
+      protected
 
-    attr_accessor :attributes
+      attr_accessor :attributes
 
-    def init_attributes(attributes)
-      self.attributes = attributes.symbolize_keys
-      freeze
-    end
-
-    private
-
-    def check_attributes(attributes)
-      return if attributes.blank?
-      if attributes.respond_to?(:permitted?) && !attributes.permitted?
-        fail ActiveEvent::Support::ForbiddenAttributesError
+      def init_attributes(attributes)
+        self.attributes = attributes.symbolize_keys
+        freeze
       end
-      (attributes.keys.map(&:to_sym) - self.class.attribute_keys).each do |k|
-        fail ActiveEvent::Support::UnknownAttributeError, "unknown attribute: #{k}"
+
+      private
+
+      def check_attributes(attributes)
+        return if attributes.blank?
+        if attributes.respond_to?(:permitted?) && !attributes.permitted?
+          fail ActiveEvent::Support::ForbiddenAttributesError
+        end
+        (attributes.keys.map(&:to_sym) - self.class.attribute_keys).each do |k|
+          fail ActiveEvent::Support::UnknownAttributeError, "unknown attribute: #{k}"
+        end
       end
     end
   end
