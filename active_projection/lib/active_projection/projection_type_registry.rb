@@ -9,7 +9,7 @@ module ActiveProjection
     # The best way to create a new projection is using the ProjectionType module
     # This module automatically registers each class
     def self.register(projection)
-      self.registry << projection
+      registry << projection
     end
 
     # @return an enumerable with all projections

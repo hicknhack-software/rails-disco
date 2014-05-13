@@ -13,7 +13,7 @@ trap(:INT) do
   pids.each do |pid|
     begin
       Process.kill 9, pid
-    rescue Exception
+    rescue
       # do nothing
     end
   end

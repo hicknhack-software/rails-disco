@@ -23,7 +23,7 @@ module ActiveEvent
       def form_name(name)
         define_singleton_method(:model_name) do
           @_model_name ||= begin
-            namespace = self.parents.find do |n|
+            namespace = parents.find do |n|
               n.respond_to?(:use_relative_model_naming?) && n.use_relative_model_naming?
             end
             ActiveModel::Name.new(self, namespace, name)

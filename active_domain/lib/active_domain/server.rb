@@ -4,7 +4,7 @@ require 'drb/drb'
 module ActiveDomain
   class Server
     def self.run(options = nil)
-      self.new(options).run
+      new(options).run
     end
 
     def initialize(new_options = nil)

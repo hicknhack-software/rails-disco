@@ -8,7 +8,7 @@ module ActiveDomain
     include Singleton
 
     def self.register(event_handler)
-      self.registry << event_handler
+      registry << event_handler
     end
 
     def self.invoke(event)

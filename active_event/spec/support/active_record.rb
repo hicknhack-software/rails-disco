@@ -20,7 +20,7 @@ module ActiveModel::Validations
   #     model.errors_on(:attribute).should include("can't be blank")
   def errors_on(attribute)
     self.valid?
-    [self.errors[attribute]].flatten.compact
+    [errors[attribute]].flatten.compact
   end
   alias_method :error_on, :errors_on
 end

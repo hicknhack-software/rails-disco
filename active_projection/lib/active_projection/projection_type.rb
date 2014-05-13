@@ -45,9 +45,9 @@ module ActiveProjection
       handlers[event_type].each do |method, arity|
         begin
           if 1 == arity
-            self.send method, event
+            send method, event
           else
-            self.send method, event, headers
+            send method, event, headers
           end
         rescue Exception => e
           LOGGER.error "[#{self.class.name}]: error processing #{event_type}[#{event_id}]\n#{e.message}\n#{e.backtrace}"

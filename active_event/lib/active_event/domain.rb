@@ -38,7 +38,7 @@ module ActiveEvent
 
     module ClassMethods
       def run_command(command)
-        self.instance.run_command command
+        instance.run_command command
       end
 
       attr_accessor :server_uri
