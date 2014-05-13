@@ -28,7 +28,7 @@ module ActiveEvent::Support
     end
 
     def attributes_except(*args)
-      attributes.reject { |k,_| args.include? k }
+      attributes.reject { |k, _| args.include? k }
     end
 
     def to_hash

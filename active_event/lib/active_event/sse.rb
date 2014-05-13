@@ -12,7 +12,7 @@ module ActiveEvent
 
     def data(data)
       data.each_pair do |key, value|
-        (value+"\n").split("\n", -1)[0..-2].each do |v|
+        (value + "\n").split("\n", -1)[0..-2].each do |v|
           @io.write "#{key}: #{v}\n"
         end
       end

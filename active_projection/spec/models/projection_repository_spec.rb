@@ -21,10 +21,10 @@ describe ActiveProjection::ProjectionRepository do
   describe 'broken' do
     it 'sets solid to false' do
       ActiveProjection::ProjectionRepository.mark_broken 0
-      expect(ActiveProjection::Projection.where(id:0).first.solid).to be_false
+      expect(ActiveProjection::Projection.where(id: 0).first.solid).to be_false
     end
   end
     it 'returns array of last ids' do
-      expect(ActiveProjection::ProjectionRepository.last_ids).to eq [5,4,3,2,1]
+      expect(ActiveProjection::ProjectionRepository.last_ids).to eq [*1..5].reverse
     end
 end

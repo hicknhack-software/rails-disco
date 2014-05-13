@@ -10,11 +10,11 @@ describe ActiveEvent::EventRepository do
     end
 
     it 'gives all events ordered by event id' do
-      ActiveEvent::EventRepository.ordered.map { |event| event.id }.should eq [1,2,3,4,5]
+      ActiveEvent::EventRepository.ordered.map { |event| event.id }.should eq [*1..5]
     end
 
     it 'gives newer events' do
-      ActiveEvent::EventRepository.after_id(3).map { |event| event.id }.should eq [4,5]
+      ActiveEvent::EventRepository.after_id(3).map { |event| event.id }.should eq [4, 5]
     end
   end
 end

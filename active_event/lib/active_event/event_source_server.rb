@@ -51,7 +51,7 @@ module ActiveEvent
 
       def initialize
         self.event_id = 0
-        self.waiters = Hash.new { |h,k| h[k] = [] }
+        self.waiters = Hash.new { |h, k| h[k] = [] }
       end
     end
 
@@ -60,7 +60,7 @@ module ActiveEvent
 
     def initialize
       self.mutex = Mutex.new
-      self.status = Hash.new { |h,k| h[k] = Status.new }
+      self.status = Hash.new { |h, k| h[k] = Status.new }
       event_connection.start
       event_queue.subscribe do |_delivery_info, _properties, body|
         process_projection JSON.parse(body).symbolize_keys!

@@ -35,7 +35,7 @@ module ActiveDomain
       self.class.registry.freeze.each do |handler|
         handler.public_instance_methods(false).each do |method_name|
           method = handler.instance_method method_name
-          event_type = (method_name.to_s.split('__')*'/').camelcase
+          event_type = (method_name.to_s.split('__') * '/').camelcase
           raise TooManyArgumentsError if 1 != method.arity
           handlers[event_type] << method
         end

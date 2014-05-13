@@ -42,7 +42,7 @@ module ActiveEvent
       end
     end
 
-    def resend_request_received (id)
+    def resend_request_received(id)
       LOGGER.debug "received resend request with id #{id}"
       resend_events_after id.to_i
     end
