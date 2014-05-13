@@ -9,7 +9,7 @@ task :release => "all:release"
 
 desc "Run all tests"
 task :test do
-	%w(active_event active_projection active_domain).each do |gem|
-		sh "cd #{gem} && rspec"
-	end
+  %w(active_event active_projection active_domain).each do |gem|
+    sh "cd #{gem} && rspec"
+  end
 end

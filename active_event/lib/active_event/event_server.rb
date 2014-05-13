@@ -67,10 +67,6 @@ module ActiveEvent
       @resend_request_queue ||= event_channel.queue('', auto_delete: true).bind(resend_request_exchange, routing_key: 'resend_request')
     end
 
-    def options
-      @options
-    end
-
-    attr_writer :options
+    attr_accessor :options
   end
 end

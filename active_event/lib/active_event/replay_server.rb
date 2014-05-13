@@ -89,10 +89,6 @@ module ActiveEvent
       @resend_exchange ||= event_channel.fanout "resend_#{options[:event_exchange]}"
     end
 
-    def options
-      @options
-    end
-
-    attr_writer :options
+    attr_accessor :options
   end
 end
