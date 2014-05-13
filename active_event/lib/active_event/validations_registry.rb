@@ -12,6 +12,7 @@ module ActiveEvent
     end
 
     private
+
     cattr_accessor :bindings
     self.bindings = []
   end

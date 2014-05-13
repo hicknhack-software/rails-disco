@@ -25,6 +25,7 @@ module ActiveEvent::Support
     end
 
     private
+
     def self.get_module_name(path)
       segments = path.split('/')
       seg = if 1 == (segments.length - 2) - (segments.index('app') || segments.index('domain')) # no namespace

@@ -60,6 +60,7 @@ module ActiveProjection
     end
 
     private
+
     attr_accessor :handlers
     attr_writer :projection_id
 

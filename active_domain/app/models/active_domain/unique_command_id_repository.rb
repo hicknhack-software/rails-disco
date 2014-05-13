@@ -6,6 +6,7 @@ module ActiveDomain
     end
 
     private
+
     def initialize
     end
 

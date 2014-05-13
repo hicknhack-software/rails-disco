@@ -17,7 +17,7 @@ module ActiveDomain
 
     def invoke(event)
       event_type = event.class.name.to_s
-      return unless handlers.has_key? event_type
+      return unless handlers.key? event_type
       handlers[event_type].each do |handler_method|
         handler_method.owner.new.send handler_method.name, event
       end
