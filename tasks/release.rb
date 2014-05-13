@@ -4,7 +4,7 @@ root    = File.expand_path('../../', __FILE__)
 version = File.read("#{root}/RAILS-DISCO_VERSION").strip
 tag     = "v#{version}"
 
-directory "pkg"
+directory 'pkg'
 
 (FRAMEWORKS + ['rails-disco']).each do |framework|
   namespace framework do
@@ -17,15 +17,15 @@ directory "pkg"
 
     task :update_version_rb do
       glob = root.dup
-      glob << "/#{framework}/lib/*" unless framework == "rails-disco"
-      glob << "/version.rb"
+      glob << "/#{framework}/lib/*" unless framework == 'rails-disco'
+      glob << '/version.rb'
 
       file = Dir[glob].first
       ruby = File.read(file)
 
-      if framework == "rails-disco" || framework == "disco-railties"
+      if framework == 'rails-disco' || framework == 'disco-railties'
         major, minor, tiny, pre = version.split('.')
-        pre = pre ? pre.inspect : "nil"
+        pre = pre ? pre.inspect : 'nil'
 
         ruby.gsub!(/^(\s*)MAJOR(\s*)= .*?$/, "\\1MAJOR = #{major}")
         raise "Could not insert MAJOR in #{file}" unless $1
@@ -47,8 +47,8 @@ directory "pkg"
     end
 
     task gem => %w(update_version_rb pkg) do
-      cmd = ""
-      cmd << "cd #{framework} && " unless framework == "rails-disco"
+      cmd = ''
+      cmd << "cd #{framework} && " unless framework == 'rails-disco'
       cmd << "gem build #{gemspec} && mv #{framework}-#{version}.gem #{root}/pkg/"
       sh cmd
     end
@@ -99,12 +99,12 @@ namespace :all do
 
   task :ensure_clean_state do
     unless `git status -s | grep -v RAILS-DISCO_VERSION`.strip.empty?
-      abort "[ABORTING] `git status` reports a dirty tree. Make sure all changes are committed"
+      abort '[ABORTING] `git status` reports a dirty tree. Make sure all changes are committed'
     end
 
     unless ENV['SKIP_TAG'] || `git tag | grep #{tag}`.strip.empty?
       abort "[ABORTING] `git tag` shows that #{tag} already exists. Has this version already\n"\
-            "           been released? Git tagging can be skipped by setting SKIP_TAG=1"
+            '           been released? Git tagging can be skipped by setting SKIP_TAG=1'
     end
   end
 
@@ -112,16 +112,16 @@ namespace :all do
     File.open('pkg/commit_message.txt', 'w') do |f|
       f.puts "# Preparing for #{version} release\n"
       f.puts
-      f.puts "# UNCOMMENT THE LINE ABOVE TO APPROVE THIS COMMIT"
+      f.puts '# UNCOMMENT THE LINE ABOVE TO APPROVE THIS COMMIT'
     end
 
-    sh "git add . && git commit --verbose --template=pkg/commit_message.txt"
-    rm_f "pkg/commit_message.txt"
+    sh 'git add . && git commit --verbose --template=pkg/commit_message.txt'
+    rm_f 'pkg/commit_message.txt'
   end
 
   task :tag do
     sh "git tag #{tag}"
-    sh "git push --tags"
+    sh 'git push --tags'
   end
 
   task :release => %w(ensure_clean_state build commit tag push)

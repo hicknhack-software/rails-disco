@@ -104,7 +104,7 @@ module ActiveProjection
     def replay_done
       LOGGER.debug 'All replayed events received'
       broken_projections = CachedProjectionRepository.all_broken
-      LOGGER.error "These projections are still broken: #{broken_projections.join(", ")}" unless broken_projections.empty?
+      LOGGER.error "These projections are still broken: #{broken_projections.join(', ')}" unless broken_projections.empty?
       replay_queue.unbind(resend_exchange)
       self.current = true
       flush_delay_queue

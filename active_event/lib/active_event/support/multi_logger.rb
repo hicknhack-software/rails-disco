@@ -12,7 +12,7 @@ module ActiveEvent::Support
     def initialize(progname = nil, formatter = nil)
       @loggers = []
       @loggers << Logger.new(STDOUT)
-      @loggers << Logger.new("log/disco.log")
+      @loggers << Logger.new('log/disco.log')
       @loggers.each do |logger|
         logger.progname = progname if progname.present?
         logger.formatter = if formatter.present?
