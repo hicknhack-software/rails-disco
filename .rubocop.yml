@@ -1,0 +1,33 @@
+inherit_from: rubocop-todo.yml
+
+AllCops:
+  Include:
+    - "**/Rakefile"
+    - config.ru
+  Exclude:
+    - disco-railties/lib/generators/disco/*/templates/**/*
+
+# the get_generator method is an overload from railties
+AccessorMethodName:
+  Exclude:
+    - disco-railties/lib/generators/disco/app/app_generator.rb
+
+# Allow process termination to fail
+HandleExceptions:
+  Exclude:
+    - disco-railties/lib/disco/**/*
+
+# Allow use of $1 for regular expressions
+PerlBackrefs:
+  Enabled: false
+
+TrailingComma:
+  EnforcedStyleForMultiline: comma
+
+SpaceInsideHashLiteralBraces:
+  EnforcedStyle: no_space
+
+# readonly? is not trivial
+TrivialAccessors:
+  Exclude:
+    - active_domain/app/models/active_domain/event.rb

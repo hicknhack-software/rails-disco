@@ -71,7 +71,8 @@ module Disco
     #{projection_body_for_action(action)}
   end"
         indent(content) if namespaced?
-        inject_into_file File.join('app/projections', class_path, "#{file_name}_projection.rb"), content, after: /(\s)*include(\s)*ActiveProjection::ProjectionType/
+        inject_into_file File.join('app/projections', class_path, "#{file_name}_projection.rb"), content,
+                         after: /(\s)*include(\s)*ActiveProjection::ProjectionType/
       end
 
       def command_name_for_action(action)

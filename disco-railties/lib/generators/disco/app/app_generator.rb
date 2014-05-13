@@ -69,7 +69,10 @@ gem 'puma'\n" unless behavior == :revoke
       remove_command :apply_rails_template, :run_bundle
 
       def source_paths
-        [File.join(Gem::Specification.find_by_name('railties').gem_dir, 'lib/rails/generators/rails/app/templates'), File.expand_path('../templates', __FILE__)]
+        [
+          File.join(Gem::Specification.find_by_name('railties').gem_dir, 'lib/rails/generators/rails/app/templates'),
+          File.expand_path('../templates', __FILE__),
+        ]
       end
 
       def add_event_source_route

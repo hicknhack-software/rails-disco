@@ -51,8 +51,12 @@ when 'new'
   if %w(-h --help).include?(ARGV.first)
     require 'disco/commands/application'
   else
-    puts "Can't initialize a new Rails Disco application within the directory of another, please change to a non-Rails Disco directory first.\n"
-    puts "Type 'disco' for help."
+    puts <<-EOT
+Can't initialize a new Rails Disco application within the directory of another.
+Please change to a non-Rails Disco directory first.
+
+Type 'disco' for help.
+EOT
     exit(1)
   end
 

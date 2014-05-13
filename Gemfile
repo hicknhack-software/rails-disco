@@ -8,6 +8,7 @@ group :test do
   gem 'rspec', require: false
   gem 'factory_girl', require: false
   gem 'coveralls', require: false
+  gem 'rubocop', require: false
 end
 
 platforms :ruby, :mswin, :mingw do
