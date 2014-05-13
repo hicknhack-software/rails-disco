@@ -43,7 +43,7 @@ when 'generate', 'destroy'
   require "disco/commands/#{command}"
 
 when 'server', 'domainserver', 'projectionserver'
-  Dir.chdir(File.expand_path('../../', APP_PATH)) unless File.exists?(File.expand_path('config.ru'))
+  Dir.chdir(File.expand_path('../../', APP_PATH)) unless File.exist?(File.expand_path('config.ru'))
 
   require "disco/commands/#{command}"
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby.exe
 ROOT_DIR ||= ENV['ROOT_DIR']
 ENV['BUNDLE_GEMFILE'] ||= File.expand_path('Gemfile', ROOT_DIR)
-require 'bundler/setup' if File.exists?(ENV['BUNDLE_GEMFILE'])
+require 'bundler/setup' if File.exist?(ENV['BUNDLE_GEMFILE'])
 
 require 'active_event'
 require 'active_domain'
