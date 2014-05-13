@@ -5,7 +5,7 @@ module ActiveProjection
     private
 
     def self.dir_names
-      %W(app/models app/projections)
+      %w(app/models app/projections)
     end
   end
 end

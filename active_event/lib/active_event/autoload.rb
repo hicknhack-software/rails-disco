@@ -5,7 +5,7 @@ module ActiveEvent
     private
 
     def self.dir_names
-      %W(app/commands app/validations app/events)
+      %w(app/commands app/validations app/events)
     end
   end
 end

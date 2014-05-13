@@ -5,7 +5,7 @@ module ActiveDomain
     private
 
     def self.dir_names
-      %W(domain/command_processors domain/validations domain/models domain/projections)
+      %w(domain/command_processors domain/validations domain/models domain/projections)
     end
   end
 end
