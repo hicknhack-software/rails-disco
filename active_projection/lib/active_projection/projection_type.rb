@@ -4,7 +4,7 @@ module ActiveProjection
     class WrongArgumentsCountError < StandardError
     end
     included do
-      ProjectionTypeRegistry::register(self)
+      ProjectionTypeRegistry.register(self)
     end
 
     def initialize

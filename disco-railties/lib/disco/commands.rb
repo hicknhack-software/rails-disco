@@ -29,7 +29,6 @@ In addition to those, there are:
 All commands can be run with -h (or --help) for more information.
 EOT
 
-
 command = ARGV.shift
 command = aliases[command] || command
 

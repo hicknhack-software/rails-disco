@@ -3,7 +3,7 @@ module ActiveDomain
     extend ActiveSupport::Concern
 
     included do
-      ProjectionRegistry::register(self)
+      ProjectionRegistry.register(self)
     end
 
   end

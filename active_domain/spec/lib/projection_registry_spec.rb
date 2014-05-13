@@ -6,6 +6,7 @@ describe ActiveDomain::ProjectionRegistry do
   class TestProjection
     def test_event(event)
     end
+
     def dummy_event(event)
     end
   end
