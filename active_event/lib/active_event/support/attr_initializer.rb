@@ -63,7 +63,7 @@ module ActiveEvent::Support
 
     def check_attributes(attributes)
       return if attributes.blank?
-      if attributes.respond_to?(:permitted?) and not attributes.permitted?
+      if attributes.respond_to?(:permitted?) && !attributes.permitted?
         raise ActiveEvent::Support::ForbiddenAttributesError
       end
       (attributes.keys.map(&:to_sym) - self.class.attribute_keys).each do |k|

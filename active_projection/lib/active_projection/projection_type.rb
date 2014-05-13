@@ -13,7 +13,7 @@ module ActiveProjection
       end
       self.class.public_instance_methods(false).each do |method_name|
         method = self.class.instance_method method_name
-        raise WrongArgumentsCountError if 2 < method.arity or method.arity < 1
+        raise WrongArgumentsCountError if 2 < method.arity || method.arity < 1
         event_type = ProjectionType.method_name_to_event_type method_name
         handlers[event_type] << [method_name, method.arity]
       end

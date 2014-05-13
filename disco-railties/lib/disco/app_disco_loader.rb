@@ -48,7 +48,10 @@ EOS
 
         # If we exhaust the search there is no executable, this could be a
         # call to generate a new application, so restore the original cwd.
-        Dir.chdir(original_cwd) and return if Pathname.new(Dir.pwd).root?
+        if Pathname.new(Dir.pwd).root?
+          Dir.chdir(original_cwd)
+          break
+        end
 
         # Otherwise keep moving upwards in search of a executable.
         Dir.chdir('..')
