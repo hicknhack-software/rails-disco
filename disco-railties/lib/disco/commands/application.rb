@@ -1,6 +1,6 @@
 require 'rails-disco/version'
 
-if ['--version', '-v'].include?(ARGV.first)
+if %w(--version -v).include?(ARGV.first)
   puts "Rails Disco #{RailsDisco::VERSION::STRING}"
   exit(0)
 end
