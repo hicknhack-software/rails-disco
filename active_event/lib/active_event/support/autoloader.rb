@@ -20,7 +20,7 @@ module ActiveEvent::Support
         namespace = const_get(namespace_name)
         namespace.send(:remove_const, const_name) if namespace.const_defined?(const_name)
       end
-      $".delete_if { |s| s.include?(path) }
+      $LOADED_FEATURES.delete_if { |s| s.include?(path) }
       require path
     end
 
