@@ -21,7 +21,7 @@ describe ActiveEvent::EventServer do
 
   it 'publishes an event' do
     allow(@server).to receive(:event_exchange).and_return(Object)
-    expect(@server.event_exchange).to receive(:publish).with("Test2", {:type => "TestEvent", :headers => "Test"})
+    expect(@server.event_exchange).to receive(:publish).with("Test2", :type => "TestEvent", :headers => "Test")
     expect(@event).to receive(:store_infos).and_return('Test')
     expect(@event).to receive(:to_json).and_return('Test2')
     @server.class.publish(@event)

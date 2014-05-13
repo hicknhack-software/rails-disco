@@ -44,7 +44,7 @@ module Disco
 
       def assign_event_name!(event_name)
         @event_class_path = event_name.include?('/') ? event_name.split('/') : event_name.split('::')
-        @event_class_path.map! &:underscore
+        @event_class_path.map!(&:underscore)
         @event_file_name = @event_class_path.pop
       end
     end

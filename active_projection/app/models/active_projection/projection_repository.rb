@@ -4,7 +4,7 @@ module ActiveProjection
       Projection.all.to_a.map { |p| p.last_id }
     end
 
-    def self.get_last_id(id)
+    def self.last_id(id)
       Projection.find(id).last_id
     end
 
@@ -12,11 +12,11 @@ module ActiveProjection
       Projection.find(id).update! last_id: last_id
     end
 
-    def self.set_broken(id)
+    def self.mark_broken(id)
       Projection.find(id).update! solid: false
     end
 
-    def self.get_all_broken
+    def self.all_broken
       Projection.where(solid: false).to_a.map { |p| p.class_name }
     end
 

@@ -3,7 +3,7 @@ module ActiveEvent::Support
     extend ActiveSupport::Concern
     module ClassMethods
       def app_path=(path)
-        set_dirs path
+        self.dir_path = path
         Autoloader.load_from dirs
       end
 
@@ -30,7 +30,7 @@ module ActiveEvent::Support
         []
       end
 
-      def set_dirs(path)
+      def dir_path=(path)
         @dirs = dir_names.map do |dir_name|
           "#{path}/#{dir_name}/**/*.rb"
         end

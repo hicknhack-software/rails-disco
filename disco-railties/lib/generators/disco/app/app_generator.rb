@@ -60,11 +60,11 @@ gem 'puma'\n" unless behavior == :revoke
     class AppGenerator < Rails::Generators::AppGenerator
       remove_class_option :version
       class_option :version, type: :boolean, aliases: '-v', group: :disco,
-                   desc: 'Show Rails Disco version number and quit'
+                             desc: 'Show Rails Disco version number and quit'
 
       remove_class_option :help
       class_option :help, type: :boolean, aliases: '-h', group: :disco,
-                   desc: 'Show this help message and quit'
+                          desc: 'Show this help message and quit'
 
       # this does not seem to work !
       remove_command :apply_rails_template, :run_bundle

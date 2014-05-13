@@ -8,7 +8,7 @@ module ActiveProjection
       projections.values.map(&:last_id)
     end
 
-    def self.get_last_id(id)
+    def self.last_id(id)
       projections[id].last_id
     end
 
@@ -16,11 +16,11 @@ module ActiveProjection
       projections[id].update! last_id: last_id
     end
 
-    def self.set_broken(id)
+    def self.mark_broken(id)
       projections[id].update! solid: false
     end
 
-    def self.get_all_broken
+    def self.all_broken
       projections.values.reject(&:solid).map(&:class_name)
     end
 

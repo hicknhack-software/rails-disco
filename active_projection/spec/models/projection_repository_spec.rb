@@ -20,7 +20,7 @@ describe ActiveProjection::ProjectionRepository do
   end
   describe 'broken' do
     it 'sets solid to false' do
-      ActiveProjection::ProjectionRepository.set_broken 0
+      ActiveProjection::ProjectionRepository.mark_broken 0
       expect(ActiveProjection::Projection.where(id:0).first.solid).to be_false
     end
   end

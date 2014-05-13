@@ -33,7 +33,7 @@ module ActiveProjection
           LOGGER.debug "[#{self.class.name}]: event #{event_id} already processed"
           false
         when last_id < event_id
-          set_broken
+          mark_broken
           LOGGER.error "[#{self.class.name}]: #{event_id - last_id} events are missing"
           false
       end
@@ -51,7 +51,7 @@ module ActiveProjection
           end
         rescue Exception => e
           LOGGER.error "[#{self.class.name}]: error processing #{event_type}[#{event_id}]\n#{e.message}\n#{e.backtrace}"
-          set_broken
+          mark_broken
           raise
         end
       end
@@ -76,11 +76,11 @@ module ActiveProjection
     end
 
     def fetch_last_id
-      ProjectionRepository.get_last_id projection_id
+      ProjectionRepository.last_id projection_id
     end
 
-    def set_broken
-      ProjectionRepository.set_broken projection_id
+    def mark_broken
+      ProjectionRepository.mark_broken projection_id
     end
 
     def update_last_id(id)

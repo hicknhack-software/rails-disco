@@ -40,7 +40,7 @@ module Disco
 
       def assign_processor_name!(processor_name)
         @processor_class_path = processor_name.include?('/') ? processor_name.split('/') : processor_name.split('::')
-        @processor_class_path.map! &:underscore
+        @processor_class_path.map!(&:underscore)
         @processor_file_name = @processor_class_path.pop
       end
     end
