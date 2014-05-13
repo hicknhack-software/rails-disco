@@ -18,8 +18,8 @@ module ActiveEvent::Support
         logger.formatter = if formatter.present?
                              formatter
                            else
-                             proc do |severity, datetime, progname, msg|
-                               "#{datetime}: [#{progname}][#{severity}]: #{msg}\n"
+                             proc do |severity, datetime, pprogname, msg|
+                               "#{datetime}: [#{pprogname}][#{severity}]: #{msg}\n"
                              end
                            end
       end

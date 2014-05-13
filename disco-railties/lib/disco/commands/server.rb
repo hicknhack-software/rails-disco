@@ -5,7 +5,8 @@ env = {'ROOT_DIR' => Dir.pwd}
 pids = []
 pids << Process.spawn(env, "ruby #{File.expand_path '../../server', __FILE__}/domain_server.rb")
 count.times do |i|
-  pids << Process.spawn(env.merge('WORKER_COUNT' => count.to_s, 'WORKER_NUMBER' => i.to_s), "ruby #{File.expand_path '../../server', __FILE__}/projection_servers.rb")
+  server_env = env.merge('WORKER_COUNT' => count.to_s, 'WORKER_NUMBER' => i.to_s)
+  pids << Process.spawn(server_env, "ruby #{File.expand_path '../../server', __FILE__}/projection_servers.rb")
 end
 pids << Process.spawn(env, 'rails s')
 trap(:INT) do

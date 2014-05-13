@@ -6,6 +6,9 @@ require 'disco/app_disco_loader'
 Disco::AppDiscoLoader.exec_app_disco
 
 require 'rails/ruby_version_check'
-Signal.trap('INT') { puts; exit(1) }
+Signal.trap('INT') do
+  puts
+  exit(1)
+end
 
 require 'disco/commands/application'

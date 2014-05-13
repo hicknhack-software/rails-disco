@@ -4,7 +4,7 @@ require 'bunny'
 module ActiveEvent
   class ProjectionException < StandardError
     # prevent better errors from tracing this exception
-    def __better_errors_bindings_stack;
+    def __better_errors_bindings_stack
       []
     end
   end
