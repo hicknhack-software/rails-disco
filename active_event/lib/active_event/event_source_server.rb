@@ -62,7 +62,7 @@ module ActiveEvent
       self.mutex = Mutex.new
       self.status = Hash.new { |h,k| h[k] = Status.new }
       event_connection.start
-      event_queue.subscribe do |delivery_info, properties, body|
+      event_queue.subscribe do |_delivery_info, _properties, body|
         process_projection JSON.parse(body).symbolize_keys!
       end
     end
@@ -105,7 +105,7 @@ module ActiveEvent
       }
     end
 
-    def parse_options(args)
+    def parse_options(_args)
       options = default_options
       options.merge! YAML.load_file(config_file)[env].deep_symbolize_keys! unless config_file.blank?
     end

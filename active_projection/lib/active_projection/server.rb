@@ -56,7 +56,7 @@ module ActiveProjection
       }
     end
 
-    def parse_options(args)
+    def parse_options(_args)
       options = default_options
       options.merge! YAML.load_file(config_file)[env].deep_symbolize_keys! unless config_file.blank?
       options[:projection_database] = YAML.load_file(rails_config_file)[env].deep_symbolize_keys! unless rails_config_file.blank?

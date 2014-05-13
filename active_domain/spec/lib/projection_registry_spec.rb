@@ -4,10 +4,10 @@ describe ActiveDomain::ProjectionRegistry do
   class TestEvent
   end
   class TestProjection
-    def test_event(event)
+    def test_event(_event)
     end
 
-    def dummy_event(event)
+    def dummy_event(_event)
     end
   end
   before :all do

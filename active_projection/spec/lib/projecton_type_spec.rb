@@ -12,10 +12,10 @@ describe ActiveProjection::ProjectionType do
   end
   describe 'instance' do
     class TestProjection
-      def test_event(event, headers)
+      def test_event(_event, _headers)
       end
 
-      def admin__dummy_event(event)
+      def admin__dummy_event(_event)
       end
     end
     class TestEvent

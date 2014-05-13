@@ -6,7 +6,7 @@ module ActiveDomain
     end
 
     private
-    def self.initialize
+    def initialize
     end
 
     def self.create_or_get(command_name)

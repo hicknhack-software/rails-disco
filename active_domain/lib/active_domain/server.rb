@@ -74,7 +74,7 @@ module ActiveDomain
       }
     end
 
-    def parse_options(args)
+    def parse_options(_args)
       options = default_options
       options.merge! YAML.load_file(config_file)[env].deep_symbolize_keys! unless config_file.blank?
     end

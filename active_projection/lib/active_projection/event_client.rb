@@ -68,7 +68,7 @@ module ActiveProjection
     end
 
     def listen_for_events
-      event_queue.subscribe do |delivery_info, properties, body|
+      event_queue.subscribe do |_delivery_info, properties, body|
         if current
           event_received properties, body
         else
@@ -78,7 +78,7 @@ module ActiveProjection
     end
 
     def listen_for_replayed_events
-      replay_queue.subscribe do |delivery_info, properties, body|
+      replay_queue.subscribe do |_delivery_info, properties, body|
         if 'replay_done' == body
           replay_done
         else

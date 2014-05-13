@@ -39,7 +39,7 @@ module ActiveProjection
 
     private
 
-    def self.initialize
+    def initialize
     end
   end
 end

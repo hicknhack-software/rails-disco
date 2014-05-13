@@ -45,7 +45,7 @@ module ActiveProjection
 
     private
 
-    def self.initialize
+    def initialize
     end
 
     cattr_accessor :projections do

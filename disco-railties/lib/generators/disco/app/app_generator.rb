@@ -102,8 +102,6 @@ require 'rails-disco/tasks'"
 
       public_task :apply_rails_template, :run_bundle
 
-      protected
-
       def self.banner
         "disco new #{self.arguments.map(&:usage).join(' ')} [options]"
       end

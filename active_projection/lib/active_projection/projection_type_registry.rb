@@ -21,8 +21,6 @@ module ActiveProjection
       @projections ||= self.class.registry.freeze.map { |projection_class| projection_class.new }.freeze
     end
 
-    private
-
     cattr_accessor(:registry) { [] }
   end
 end

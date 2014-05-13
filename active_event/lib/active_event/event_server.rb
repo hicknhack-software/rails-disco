@@ -37,7 +37,7 @@ module ActiveEvent
     end
 
     def listen_for_resend_requests
-      resend_request_queue.subscribe do |delivery_info, properties, id|
+      resend_request_queue.subscribe do |_delivery_info, _properties, id|
         resend_request_received id
       end
     end
