@@ -26,7 +26,7 @@ module ActiveProjection
       end
     rescue Interrupt
       LOGGER.info 'Catching Interrupt'
-    rescue Exception => e
+    rescue => e
       LOGGER.error e.message
       LOGGER.error e.backtrace.join("\n")
       raise
@@ -130,7 +130,7 @@ module ActiveProjection
             projection.invoke event, headers
           end
           send_projection_notification headers[:id], projection
-        rescue Exception => e
+        rescue => e
           send_projection_notification headers[:id], projection, e
         end
       end

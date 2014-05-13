@@ -14,7 +14,7 @@ module ActiveDomain
       RELOADER.execute_if_updated
       processor, method = @@routes[command.class]
       processor_instance(processor).method(method).call(command)
-    rescue Exception => e
+    rescue => e
       LOGGER.error e.message
       LOGGER.error e.backtrace.join("\n")
       raise ActiveEvent::DomainExceptionCapture, ["#{e.class.name}: #{e.message}", e.backtrace].to_json, e.backtrace

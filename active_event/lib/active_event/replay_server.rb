@@ -19,7 +19,7 @@ module ActiveEvent
       @last_id = id
       start_republishing
       send_done_message
-    rescue Exception => e
+    rescue => e
       LOGGER.error e.message
       LOGGER.error e.backtrace.join("\n")
       raise e

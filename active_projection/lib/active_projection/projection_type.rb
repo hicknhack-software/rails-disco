@@ -49,7 +49,7 @@ module ActiveProjection
           else
             send method, event, headers
           end
-        rescue Exception => e
+        rescue => e
           LOGGER.error "[#{self.class.name}]: error processing #{event_type}[#{event_id}]\n#{e.message}\n#{e.backtrace}"
           mark_broken
           raise

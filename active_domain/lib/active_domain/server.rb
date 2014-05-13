@@ -19,7 +19,7 @@ module ActiveDomain
       DRb.thread.join
     rescue Interrupt
       LOGGER.info 'Catching Interrupt'
-    rescue Exception => e
+    rescue => e
       LOGGER.error e.message
       LOGGER.error e.backtrace.join("\n")
       raise e
