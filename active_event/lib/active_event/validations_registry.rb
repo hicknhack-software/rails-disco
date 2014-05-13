@@ -1,6 +1,5 @@
 module ActiveEvent
   class ValidationsRegistry
-
     def self.register(validations, target)
       self.bindings << {validation: validations, target: target}
     end

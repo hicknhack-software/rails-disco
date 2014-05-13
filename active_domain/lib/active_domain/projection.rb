@@ -5,6 +5,5 @@ module ActiveDomain
     included do
       ProjectionRegistry.register(self)
     end
-
   end
 end

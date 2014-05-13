@@ -3,7 +3,6 @@ require 'yaml'
 
 module Disco
   class AppBuilder < Rails::AppBuilder
-
     def gemfile
       super
       append_file 'Gemfile', "\n# Rails Disco support

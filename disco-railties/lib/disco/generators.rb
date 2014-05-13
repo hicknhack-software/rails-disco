@@ -2,7 +2,6 @@ require 'rails/generators'
 
 module Rails
   module Generators
-
     def self.help(command = 'generate')
       lookup!
 
@@ -34,7 +33,6 @@ Please choose a generator below.
       disco.delete('plugin_new')
       print_list('disco', disco)
     end
-
   end
 end
 

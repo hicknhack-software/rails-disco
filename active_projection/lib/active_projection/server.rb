@@ -2,7 +2,6 @@ require 'active_record'
 
 module ActiveProjection
   class Server
-
     def self.run(options = nil)
       self.new(options).run
     end

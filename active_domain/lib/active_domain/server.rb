@@ -3,7 +3,6 @@ require 'drb/drb'
 
 module ActiveDomain
   class Server
-
     def self.run(options = nil)
       self.new(options).run
     end

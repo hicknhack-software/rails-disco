@@ -1,6 +1,5 @@
 module ActiveDomain
   class EventRepository
-
     def self.ordered
       ActiveDomain::Event.order(:id)
     end
