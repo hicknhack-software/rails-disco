@@ -14,7 +14,7 @@ module Disco
       hook_for :model, in: :disco, require: true
 
       hook_for :command, in: :disco, require: true do |hook|
-        raise 'do not use id as scaffolding attribute! This is reserved for the model id' if attributes_names.include? 'id'
+        fail 'do not use id as scaffolding attribute! This is reserved for the model id' if attributes_names.include? 'id'
         ACTIONS.each do |action|
           invoke hook, args_for_command_action(action), opts_for_command_action(action)
           add_to_projections(action)
@@ -95,7 +95,7 @@ module Disco
         when 'delete'
           "#{class_name}.find(event.id).destroy!"
         else
-          raise 'unknown action'
+          fail 'unknown action'
         end
       end
 

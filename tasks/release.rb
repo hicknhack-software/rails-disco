@@ -28,19 +28,19 @@ directory 'pkg'
         pre = pre ? pre.inspect : 'nil'
 
         ruby.gsub!(/^(\s*)MAJOR(\s*)= .*?$/, "\\1MAJOR = #{major}")
-        raise "Could not insert MAJOR in #{file}" unless $1
+        fail "Could not insert MAJOR in #{file}" unless $1
 
         ruby.gsub!(/^(\s*)MINOR(\s*)= .*?$/, "\\1MINOR = #{minor}")
-        raise "Could not insert MINOR in #{file}" unless $1
+        fail "Could not insert MINOR in #{file}" unless $1
 
         ruby.gsub!(/^(\s*)TINY(\s*)= .*?$/, "\\1TINY  = #{tiny}")
-        raise "Could not insert TINY in #{file}" unless $1
+        fail "Could not insert TINY in #{file}" unless $1
 
         ruby.gsub!(/^(\s*)PRE(\s*)= .*?$/, "\\1PRE   = #{pre}")
-        raise "Could not insert PRE in #{file}" unless $1
+        fail "Could not insert PRE in #{file}" unless $1
       else
         ruby.gsub!(/^(\s*)Gem::Version\.new .*?$/, "\\1Gem::Version.new \'#{version}\'")
-        raise "Could not insert Gem::Version in #{file}" unless $1
+        fail "Could not insert Gem::Version in #{file}" unless $1
       end
 
       File.open(file, 'w') { |f| f.write ruby }

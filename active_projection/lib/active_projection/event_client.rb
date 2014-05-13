@@ -10,7 +10,7 @@ module ActiveProjection
     end
 
     def configure(options)
-      raise 'Unsupported! Cannot configure running client' if running
+      fail 'Unsupported! Cannot configure running client' if running
       self.options = options
       self
     end
@@ -40,7 +40,7 @@ module ActiveProjection
     attr_accessor :delay_queue # stores events while processing missing events
 
     def run_once
-      raise 'Unsupported! Connot start a running client' if running
+      fail 'Unsupported! Connot start a running client' if running
       self.running = true
       yield
     ensure

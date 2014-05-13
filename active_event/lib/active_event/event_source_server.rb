@@ -34,7 +34,7 @@ module ActiveEvent
             projection_status.waiters[event_id].delete cv
           end
         end
-        raise ProjectionException, projection_status.error, projection_status.backtrace if projection_status.error
+        fail ProjectionException, projection_status.error, projection_status.backtrace if projection_status.error
       end
       yield
     end
@@ -42,7 +42,7 @@ module ActiveEvent
     def projection_status(projection)
       mutex.synchronize do
         projection_status = status[projection]
-        raise ProjectionException, projection_status.error, projection_status.backtrace if projection_status.error
+        fail ProjectionException, projection_status.error, projection_status.backtrace if projection_status.error
       end
     end
 

@@ -64,10 +64,10 @@ module ActiveEvent::Support
     def check_attributes(attributes)
       return if attributes.blank?
       if attributes.respond_to?(:permitted?) && !attributes.permitted?
-        raise ActiveEvent::Support::ForbiddenAttributesError
+        fail ActiveEvent::Support::ForbiddenAttributesError
       end
       (attributes.keys.map(&:to_sym) - self.class.attribute_keys).each do |k|
-        raise ActiveEvent::Support::UnknownAttributeError, "unknown attribute: #{k}"
+        fail ActiveEvent::Support::UnknownAttributeError, "unknown attribute: #{k}"
       end
     end
   end
