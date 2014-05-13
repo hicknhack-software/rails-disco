@@ -22,7 +22,7 @@ module ActiveModel::Validations
     self.valid?
     [self.errors[attribute]].flatten.compact
   end
-  alias :error_on :errors_on
+  alias_method :error_on, :errors_on
 end
 
 RSpec.configure do |config|
