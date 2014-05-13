@@ -35,8 +35,8 @@ describe ActiveEvent::Support::AttrInitializer do
     end
 
     it 'can retrieve attributes' do
-      @color.r.should == 10
-      @color.g.should == 20
+      @color.r.should eq(10)
+      @color.g.should eq(20)
       @color.b.should be_nil
     end
 

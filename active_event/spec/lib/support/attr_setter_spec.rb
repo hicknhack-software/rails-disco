@@ -35,8 +35,8 @@ describe ActiveEvent::Support::AttrSetter do
     end
 
     it 'can retrieve attributes' do
-      @color.r.should == 10
-      @color.g.should == 20
+      @color.r.should eq(10)
+      @color.g.should eq(20)
       @color.b.should be_nil
     end
 
@@ -54,7 +54,7 @@ describe ActiveEvent::Support::AttrSetter do
 
     it 'allows write' do
       @color.r = 20
-      @color.r.should == 20
+      @color.r.should eq(20)
       @color.r = 10
     end
   end
