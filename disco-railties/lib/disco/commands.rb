@@ -34,38 +34,38 @@ command = ARGV.shift
 command = aliases[command] || command
 
 case command
-  when 'generate', 'destroy'
-    require 'disco/generators'
+when 'generate', 'destroy'
+  require 'disco/generators'
 
-    require APP_PATH
-    Rails.application.require_environment!
-    Rails.application.load_generators
+  require APP_PATH
+  Rails.application.require_environment!
+  Rails.application.load_generators
 
-    require "disco/commands/#{command}"
+  require "disco/commands/#{command}"
 
-  when 'server', 'domainserver', 'projectionserver'
-    Dir.chdir(File.expand_path('../../', APP_PATH)) unless File.exists?(File.expand_path('config.ru'))
+when 'server', 'domainserver', 'projectionserver'
+  Dir.chdir(File.expand_path('../../', APP_PATH)) unless File.exists?(File.expand_path('config.ru'))
 
-    require "disco/commands/#{command}"
+  require "disco/commands/#{command}"
 
-  when 'new'
-    if %w(-h --help).include?(ARGV.first)
-      require 'disco/commands/application'
-    else
-      puts "Can't initialize a new Rails Disco application within the directory of another, please change to a non-Rails Disco directory first.\n"
-      puts "Type 'disco' for help."
-      exit(1)
-    end
-
-  when '--version'
-    require 'rails-disco/version'
-    puts "Rails Disco #{RailsDisco::VERSION::STRING}"
-
-  when '--help'
-    puts help_message
-
+when 'new'
+  if %w(-h --help).include?(ARGV.first)
+    require 'disco/commands/application'
   else
-    puts "Error: Command '#{command}' not recognized"
-    puts help_message
+    puts "Can't initialize a new Rails Disco application within the directory of another, please change to a non-Rails Disco directory first.\n"
+    puts "Type 'disco' for help."
     exit(1)
+  end
+
+when '--version'
+  require 'rails-disco/version'
+  puts "Rails Disco #{RailsDisco::VERSION::STRING}"
+
+when '--help'
+  puts help_message
+
+else
+  puts "Error: Command '#{command}' not recognized"
+  puts help_message
+  exit(1)
 end

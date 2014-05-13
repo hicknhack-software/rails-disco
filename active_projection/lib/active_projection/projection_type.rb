@@ -27,15 +27,15 @@ module ActiveProjection
       last_id = fetch_last_id
       event_id = headers[:id]
       case
-        when last_id + 1 == event_id
-          true
-        when last_id >= event_id
-          LOGGER.debug "[#{self.class.name}]: event #{event_id} already processed"
-          false
-        when last_id < event_id
-          mark_broken
-          LOGGER.error "[#{self.class.name}]: #{event_id - last_id} events are missing"
-          false
+      when last_id + 1 == event_id
+        true
+      when last_id >= event_id
+        LOGGER.debug "[#{self.class.name}]: event #{event_id} already processed"
+        false
+      when last_id < event_id
+        mark_broken
+        LOGGER.error "[#{self.class.name}]: #{event_id - last_id} events are missing"
+        false
       end
     end
 
