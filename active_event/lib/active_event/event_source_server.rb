@@ -101,7 +101,7 @@ module ActiveEvent
               host: '127.0.0.1',
               port: 9797,
           },
-          event_exchange: 'events'
+          event_exchange: 'events',
       }
     end
 

@@ -62,7 +62,7 @@ module ActiveDomain
           },
           domain_database: {
               adapter: 'sqlite3',
-              database: File.expand_path('db/domain.sqlite3', base_path)
+              database: File.expand_path('db/domain.sqlite3', base_path),
           },
           event_connection: {
               scheme: 'amqp',
@@ -70,7 +70,7 @@ module ActiveDomain
               host: '127.0.0.1',
               port: 9797,
           },
-          event_exchange: 'events'
+          event_exchange: 'events',
       }
     end
 

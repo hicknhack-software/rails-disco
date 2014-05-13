@@ -1,7 +1,7 @@
 require 'logger'
 module ActiveEvent::Support
   class MultiLogger
-    [:info, :debug, :error, :fatal, :warn, :unknown, ].each do |action|
+    [:info, :debug, :error, :fatal, :warn, :unknown].each do |action|
       define_method action do |msg|
         @loggers.each do |logger|
           logger.send(action, msg)

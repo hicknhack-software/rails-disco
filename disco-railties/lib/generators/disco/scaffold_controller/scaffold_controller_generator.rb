@@ -18,7 +18,7 @@ module Disco
       end
 
       private
-      
+
       def params_string
         attributes.map { |x| "#{x.name}: params[:#{singular_table_name}][:#{x.name}]" }.join(', ')
       end

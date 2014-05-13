@@ -13,7 +13,7 @@ module Disco
       def initialize(args, *options)
         super
         assign_processor_name!(processor_name)
-      end      
+      end
 
       protected
 

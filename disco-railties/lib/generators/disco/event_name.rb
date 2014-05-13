@@ -13,7 +13,7 @@ module Disco
       def initialize(args, *options)
         super
         assign_event_name!(event_name)
-      end      
+      end
 
       protected
 
