@@ -24,7 +24,7 @@ describe ActiveProjection::ProjectionRepository do
       expect(ActiveProjection::Projection.where(id: 0).first.solid).to be_false
     end
   end
-    it 'returns array of last ids' do
-      expect(ActiveProjection::ProjectionRepository.last_ids).to eq [*1..5].reverse
-    end
+  it 'returns array of last ids' do
+    expect(ActiveProjection::ProjectionRepository.last_ids).to eq [*1..5].reverse
+  end
 end

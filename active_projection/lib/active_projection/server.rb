@@ -42,17 +42,17 @@ module ActiveProjection
 
     def default_options
       {
-          projection_database: {
-              adapter: 'sqlite3',
-              database: File.expand_path('db/production.sqlite3', base_path),
+        projection_database: {
+          adapter: 'sqlite3',
+          database: File.expand_path('db/production.sqlite3', base_path),
+        },
+        event_connection: {
+          scheme: 'amqp',
+          userinfo: nil,
+          host: '127.0.0.1',
+          port: 9797,
           },
-          event_connection: {
-              scheme: 'amqp',
-              userinfo: nil,
-              host: '127.0.0.1',
-              port: 9797,
-          },
-          event_exchange: 'events',
+        event_exchange: 'events',
       }
     end
 

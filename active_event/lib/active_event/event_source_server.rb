@@ -97,13 +97,13 @@ module ActiveEvent
 
     def default_options
       {
-          event_connection: {
-              scheme: 'amqp',
-              userinfo: nil,
-              host: '127.0.0.1',
-              port: 9797,
-          },
-          event_exchange: 'events',
+        event_connection: {
+          scheme: 'amqp',
+          userinfo: nil,
+          host: '127.0.0.1',
+          port: 9797,
+        },
+        event_exchange: 'events',
       }
     end
 

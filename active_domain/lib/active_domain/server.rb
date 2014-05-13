@@ -52,25 +52,25 @@ module ActiveDomain
 
     def default_options
       {
-          drb_server: {
-              scheme: 'druby',
-              hostname: '127.0.0.1',
-              port: 8787,
+        drb_server: {
+          scheme: 'druby',
+          hostname: '127.0.0.1',
+          port: 8787,
+        },
+        drb_config: {
+          verbose: true,
           },
-          drb_config: {
-              verbose: true,
+        domain_database: {
+          adapter: 'sqlite3',
+          database: File.expand_path('db/domain.sqlite3', base_path),
           },
-          domain_database: {
-              adapter: 'sqlite3',
-              database: File.expand_path('db/domain.sqlite3', base_path),
+        event_connection: {
+          scheme: 'amqp',
+          userinfo: nil,
+          host: '127.0.0.1',
+          port: 9797,
           },
-          event_connection: {
-              scheme: 'amqp',
-              userinfo: nil,
-              host: '127.0.0.1',
-              port: 9797,
-          },
-          event_exchange: 'events',
+        event_exchange: 'events',
       }
     end
 

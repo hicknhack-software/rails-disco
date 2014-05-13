@@ -1,13 +1,13 @@
 ARGV << '--help' if ARGV.empty?
 
 aliases = {
-    'ds' => 'domainserver',
-    's' => 'server',
-    'ps' => 'projectionserver',
-    'g' => 'generate',
-    'd' => 'destroy',
-    '-h' => '--help',
-    '-v' => '--version',
+  'ds' => 'domainserver',
+  's' => 'server',
+  'ps' => 'projectionserver',
+  'g' => 'generate',
+  'd' => 'destroy',
+  '-h' => '--help',
+  '-v' => '--version',
 }
 
 help_message = <<-EOT

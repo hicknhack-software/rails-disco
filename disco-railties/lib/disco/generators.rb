@@ -39,10 +39,10 @@ Please choose a generator below.
 end
 
 Rails::Generators.options.deep_merge! disco: {
-    command: :command,
-    command_processor: :command_processor,
-    migration: :migration,
-    model: :model,
-    projection: :projection,
-    scaffold_controller: :scaffold_controller,
+  command: :command,
+  command_processor: :command_processor,
+  migration: :migration,
+  model: :model,
+  projection: :projection,
+  scaffold_controller: :scaffold_controller,
 }
