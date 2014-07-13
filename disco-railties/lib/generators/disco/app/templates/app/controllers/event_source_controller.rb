@@ -4,9 +4,8 @@ class EventSourceController < ApplicationController
   def projected
     response.headers['Content-Type'] = 'text/event-stream'
     sse = ActiveEvent::SSE.new(response.stream)
-    ActiveEvent::EventSourceServer.after_event_projection event_id, projection do
-      sse.event('projected')
-    end
+    ActiveEvent::EventSourceServer.wait_for_event_projection event_id, projection, timeout: 10
+    sse.event('projected')
   rescue IOError
     # ignore disconnect
   rescue ActiveEvent::ProjectionException => e

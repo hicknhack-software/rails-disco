@@ -13,47 +13,69 @@ module ActiveEvent
     include Singleton
 
     class << self
-      def after_event_projection(event_id, projection, &block)
-        instance.after_event_projection(event_id, projection, &block)
+      def wait_for_event_projection(event_id, projection, options = {})
+        instance.wait_for_event_projection(event_id, projection, options)
       end
 
-      def projection_status(projection)
-        instance.projection_status(projection)
+      def fail_on_projection_error(projection)
+        instance.fail_on_projection_error(projection)
       end
     end
 
-    def after_event_projection(event_id, projection)
+    def wait_for_event_projection(event_id, projection, options = {})
       mutex.synchronize do
         projection_status = status[projection]
-        if projection_status.event_id < event_id
-          cv = ConditionVariable.new
-          begin
-            projection_status.waiters[event_id] << cv
-            cv.wait(mutex)
-          ensure
-            projection_status.waiters[event_id].delete cv
-          end
-        end
-        fail ProjectionException, projection_status.error, projection_status.backtrace if projection_status.error
+        projection_status.fail_on_error # projection will not continue if error occurred
+        projection_status.waiter(event_id).wait(mutex, options[:timeout])
+        projection_status.fail_on_error
       end
-      yield
     end
 
-    def projection_status(projection)
+    def fail_on_projection_error(projection)
       mutex.synchronize do
         projection_status = status[projection]
-        fail ProjectionException, projection_status.error, projection_status.backtrace if projection_status.error
+        projection_status.fail_on_error
       end
     end
 
     private
 
     class Status
-      attr_accessor :event_id, :waiters, :error, :backtrace
+      module UnconditionalVariable
+        def self.wait(_mutex, _timeout = 0)
+          nil
+        end
+      end
+
+      @event_id = 0
+      @error = nil
+      @backtrace = nil
 
       def initialize
-        self.event_id = 0
-        self.waiters = Hash.new { |h, k| h[k] = [] }
+        @waiters = {}
+      end
+
+      def waiter(event)
+        if event > @event_id
+          @waiters[event] ||= ConditionVariable.new
+        else
+          UnconditionalVariable
+        end
+      end
+
+      def set_error(error, backtrace)
+        @error, @backtrace = error, backtrace if error || backtrace
+      end
+
+      def event=(event)
+        @event_id = event
+        cvs = []
+        @waiters.delete_if { |event_id, cv| (event_id <= event) && (cvs << cv) }
+        cvs.map &:broadcast
+      end
+
+      def fail_on_error
+        fail ProjectionException, @error, @backtrace if @error
       end
     end
 
@@ -72,10 +94,8 @@ module ActiveEvent
     def process_projection(data)
       mutex.synchronize do
         projection_status = status[data[:projection]]
-        projection_status.event_id = data[:event]
-        projection_status.error = data[:error] if data.key? :error
-        projection_status.backtrace = data[:backtrace] if data.key? :backtrace
-        projection_status.waiters.delete(data[:event]).to_a.each { |cv| cv.signal }
+        projection_status.set_error data[:error], data[:backtrace]
+        projection_status.event = data[:event]
       end
     end
 
