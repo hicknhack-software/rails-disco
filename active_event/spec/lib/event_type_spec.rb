@@ -8,11 +8,11 @@ describe ActiveEvent::EventType do
 
   describe 'create instance' do
     it 'can create an instance' do
-      expect { ActiveEvent::EventType.create_instance :RgbColorEvent, r: 10 }.to be
+      expect(ActiveEvent::EventType.create_instance :RgbColorEvent, r: 10).to be
     end
 
     it 'can create events of any kind' do
-      expect { ActiveEvent::EventType.create_instance :RandomEvent, r: 10 }.to be
+      expect(ActiveEvent::EventType.create_instance :RandomEvent, r: 10).to be
     end
   end
 
@@ -22,7 +22,7 @@ describe ActiveEvent::EventType do
     end
 
     it 'can report type' do
-      @color.event_type.should == 'RgbColorEvent'
+      expect(@color.event_type).to eq('RgbColorEvent')
     end
   end
 
@@ -32,7 +32,7 @@ describe ActiveEvent::EventType do
     end
 
     it 'can report type' do
-      @random.event_type.should == 'RandomEvent'
+      expect(@random.event_type).to eq('RandomEvent')
     end
   end
 end

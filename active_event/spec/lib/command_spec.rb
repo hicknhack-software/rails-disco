@@ -8,7 +8,7 @@ describe ActiveEvent::Command do
 
   describe 'create instance' do
     it 'can create an instance' do
-      expect { TestCommand.new r: 10 }.to be
+      expect(TestCommand.new r: 10).to be
     end
   end
 end

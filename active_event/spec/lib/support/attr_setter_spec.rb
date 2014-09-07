@@ -8,11 +8,11 @@ describe ActiveEvent::Support::AttrSetter do
 
   describe 'constructor' do
     it 'works for no args' do
-      expect { MutableRgbColor.new }.to be
+      expect( MutableRgbColor.new ).to be
     end
 
     it 'works for defined attributes' do
-      expect { MutableRgbColor.new r: 10, g: 20 }.to be
+      expect( MutableRgbColor.new r: 10, g: 20 ).to be
     end
 
     it 'fails for undeclared attributes' do
@@ -35,26 +35,26 @@ describe ActiveEvent::Support::AttrSetter do
     end
 
     it 'can retrieve attributes' do
-      @color.r.should eq(10)
-      @color.g.should eq(20)
-      @color.b.should be_nil
+      expect(@color.r).to eq(10)
+      expect(@color.g).to eq(20)
+      expect(@color.b).to be_nil
     end
 
     it 'can filter attributes' do
-      @color.attributes_except(:r).should eq(g: 20)
+      expect(@color.attributes_except(:r)).to eq(g: 20)
     end
 
     it 'can convert to hash' do
-      @color.to_hash.should eq(r: 10, g: 20)
+      expect(@color.to_hash).to eq(r: 10, g: 20)
     end
 
     it 'is not automatically frozen' do
-      @color.frozen?.should be_false
+      expect(@color.frozen?).to be_falsey
     end
 
     it 'allows write' do
       @color.r = 20
-      @color.r.should eq(20)
+      expect(@color.r).to eq(20)
       @color.r = 10
     end
   end

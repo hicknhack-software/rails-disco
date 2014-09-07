@@ -14,7 +14,7 @@ describe ActiveDomain::CommandProcessor do
 
   describe 'class helper' do
     it 'define event process' do
-      TestDummyProcessor.instance_method(:processTestDummy).should be
+      expect(TestDummyProcessor.instance_method(:processTestDummy)).to be
     end
   end
 

@@ -10,10 +10,10 @@ describe ActiveProjection::ProjectionTypeRegistry do
   end
 
   it 'initializes' do
-    ActiveProjection::ProjectionTypeRegistry.instance.should be
+    expect(ActiveProjection::ProjectionTypeRegistry.instance).to be
   end
 
   it 'report projections' do
-    ActiveProjection::ProjectionTypeRegistry.projections.count.should eq 1
+    expect(ActiveProjection::ProjectionTypeRegistry.projections.count).to eq(1)
   end
 end

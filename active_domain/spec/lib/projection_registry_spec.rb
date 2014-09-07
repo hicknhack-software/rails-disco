@@ -15,7 +15,7 @@ describe ActiveDomain::ProjectionRegistry do
   end
 
   it 'initializes' do
-    ActiveDomain::ProjectionRegistry.instance.should be
+    expect(ActiveDomain::ProjectionRegistry.instance).to be
   end
 
   it 'invokes event handlers' do

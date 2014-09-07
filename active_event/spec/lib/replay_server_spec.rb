@@ -42,19 +42,19 @@ describe ActiveEvent::ReplayServer do
 
     it 'overrides id if smaller' do
       @server.queue << 1
-      expect(@server.new_id?).to be_true
+      expect(@server.new_id?).to be_truthy
       expect(@server.instance_variable_get(:@last_id)).to eq 1
     end
 
     it 'does nothing if id is greater' do
       @server.queue << 5
-      expect(@server.new_id?).to be_false
+      expect(@server.new_id?).to be_falsy
       expect(@server.instance_variable_get(:@last_id)).not_to eq 5
     end
 
     it 'does nothing if queue is empty' do
       @server.queue.clear
-      expect(@server.new_id?).to be_false
+      expect(@server.new_id?).to be_falsy
     end
   end
 

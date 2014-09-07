@@ -21,7 +21,7 @@ describe ActiveProjection::ProjectionRepository do
   describe 'broken' do
     it 'sets solid to false' do
       ActiveProjection::ProjectionRepository.mark_broken 0
-      expect(ActiveProjection::Projection.where(id: 0).first.solid).to be_false
+      expect(ActiveProjection::Projection.where(id: 0).first.solid).to be_falsey
     end
   end
   it 'returns array of last ids' do

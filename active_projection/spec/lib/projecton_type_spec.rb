@@ -4,7 +4,7 @@ require_relative '../support/active_record'
 describe ActiveProjection::ProjectionType do
   it 'should register automatically' do
     expect(ActiveProjection::ProjectionTypeRegistry).to receive(:register) do |arg|
-      arg.name.to_sym.should eq :DummyProjection
+      expect(arg.name.to_sym).to eq :DummyProjection
     end
     class DummyProjection
       include ActiveProjection::ProjectionType
@@ -31,9 +31,9 @@ describe ActiveProjection::ProjectionType do
     end
     it 'initializes all handler' do
       handlers = @projection.instance_variable_get(:@handlers)
-      handlers.length.should eq 2
-      handlers['TestEvent'].should be
-      handlers['DummyEvent'].should be
+      expect(handlers.length).to eq 2
+      expect(handlers['TestEvent']).to be
+      expect(handlers['DummyEvent']).to be
     end
 
     describe 'evaluate' do
@@ -54,16 +54,16 @@ describe ActiveProjection::ProjectionType do
         end
 
         it 'processes event with the correct id' do
-          expect(@projection.evaluate(id: 6)).to be_true
+          expect(@projection.evaluate(id: 6)).to be_truthy
         end
 
         it 'rejects event with last id smaller event id' do
-          expect(@projection.evaluate(id: 3)).to be_false
+          expect(@projection.evaluate(id: 3)).to be_falsey
         end
 
         it 'rejects event with last greater equal event id' do
           expect(ActiveProjection::ProjectionRepository).to receive(:mark_broken).with(0)
-          expect(@projection.evaluate(id: 7)).to be_false
+          expect(@projection.evaluate(id: 7)).to be_falsey
         end
       end
     end
