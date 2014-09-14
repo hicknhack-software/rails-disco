@@ -8,8 +8,10 @@
 
 # Rails Disco - A distributed party with commands, events and projections 
 
-Rails Disco is a framework that extends Rails with support for the best parts of event sourcing.
-The framework consists out of three main parts: commands, events and projections.
+Rails Disco is based on Ruby on Rails and makes event sourcing easy.
+Greg Young showed the advantages of event sourcing multiple times. [GOTO Conference Talk](http://youtu.be/hv2dKtPq0ME) (Chicago 2014)
+
+Rails Disco consists out of three main parts: commands, events and projections.
 
 _Commands_ will be created and executed by actions of your controller, instead of directly manipulating your model. These commands are only the order to do something and after possible validations, the framework executes them by creating an event and finally manipulating the model.
 
