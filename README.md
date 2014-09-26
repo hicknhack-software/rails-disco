@@ -80,4 +80,4 @@ Finally _projections_ are your representation of your data, they get the events 
 
    You will see some console output, the projection requests the missing posts from the domain. Finally the state of your projection database will be restored.
 
-1. That's it for now, have fun with it. For more information take a look at the [wiki](https://github.com/hicknhack-software/rails-disco/wiki)
+1. That's it for now, have fun with it. For more information take a look at the [wiki](https://github.com/hicknhack-software/rails-disco/wiki) and the [examples](https://github.com/hicknhack-software/rails-disco-examples)
