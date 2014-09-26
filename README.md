@@ -3,7 +3,7 @@
 [![Coverage Status](https://coveralls.io/repos/hicknhack-software/rails-disco/badge.png)](https://coveralls.io/r/hicknhack-software/rails-disco)
 [![Dependency Status](https://gemnasium.com/hicknhack-software/rails-disco.png)](https://gemnasium.com/hicknhack-software/rails-disco) 
 [![Code Climate](https://codeclimate.com/github/hicknhack-software/rails-disco.png)](https://codeclimate.com/github/hicknhack-software/rails-disco)
-[![Gem Version](http://img.shields.io/gem/v/rails-disco.svg)](https://rubygems.org/gems/rails-disco)
+[![Gem Version](https://badge.fury.io/rb/rails-disco.svg)](http://badge.fury.io/rb/rails-disco)
 [![License](http://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/hicknhack-software/rails-disco/blob/master/LICENSE)
 
 # Rails Disco - A distributed party with commands, events and projections 
