@@ -21,8 +21,7 @@ module ActiveEvent
 
     def initialize(*args)
       super
-      # DRb.start_service # should not be necessary
-      self.server = DRbObject.new_with_uri self.class.server_uri
+      self.server = DRbObject.new_with_uri drb_server_uri
     end
 
     def run_command(command)
@@ -36,19 +35,43 @@ module ActiveEvent
 
     attr_accessor :server
 
+    def drb_server_uri
+      self.class.drb_server_uri || URI::Generic.build(options[:drb_server]).to_s
+    end
+
+    def options
+      @options ||= parse_options
+    end
+
+    def config_file
+      self.class.config_file || File.join(Rails.root, 'config', 'disco.yml')
+    end
+
+    def default_options
+      {
+          drb_server: {
+              scheme: 'druby',
+              hostname: '127.0.0.1',
+              port: 8787,
+          },
+      }
+    end
+
+    def parse_options
+      options = default_options
+      options.merge! YAML.load_file(config_file)[Rails.env].deep_symbolize_keys! unless config_file.blank?
+    end
+
     module ClassMethods
       def run_command(command)
         instance.run_command command
       end
 
-      attr_accessor :server_uri
-
-      def self.extended(base)
-        base.server_uri = 'druby://127.0.0.1:8787'
-      end
+      attr_accessor :drb_server_uri
+      attr_accessor :config_file
 
       def set_config(protocol = 'druby', host = 'localhost', port = 8787)
-        self.server_uri = "#{protocol}://#{host}:#{port}"
+        self.drb_server_uri = "#{protocol}://#{host}:#{port}"
       end
     end
   end

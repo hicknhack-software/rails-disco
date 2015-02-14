@@ -12,7 +12,8 @@ describe ActiveEvent::Domain do
     end
 
     it 'sends command over instance' do
-      expect(DRbObject).to receive(:new_with_uri).with(TestDomain.server_uri).and_return(@drb_object)
+      TestDomain.set_config('dummy')
+      expect(DRbObject).to receive(:new_with_uri).with(TestDomain.drb_server_uri).and_return(@drb_object)
       expect(@command).to receive(:valid?).and_return(true)
       expect(@drb_object).to receive(:run_command).with(@command)
       TestDomain.run_command(@command)
